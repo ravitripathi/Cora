@@ -10,7 +10,9 @@ const Feed = ({ match }) => (
             <div className="panel-body">
                 <div className='row'>
                     <div className='col-lg-8'>
-                        <span className='pull-right AuthorName'>By: <a>Jayant Rana</a></span>
+                        <span className='pull-right AuthorName'>
+                            <Link to={'/home/profile'}>By: <a>Jayant Rana</a></Link>
+                        </span>
                         <Link to={`/home/feed`}><a><h5>Feed Head</h5></a></Link>
                         <p>Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nullam id dolor id nibh ultricies vehicula ut id elit</p>
                     </div>

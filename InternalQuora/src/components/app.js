@@ -6,6 +6,7 @@ import Test from '../components/test'
 import Home from './home'
 import Main from './main'
 import IndiFeed from './indifeed'
+import Profile from './profile'
 
 import '../style/main.css'
 
@@ -29,6 +30,8 @@ class App extends Component {
                     <Route exact path='/' component={Home} />
                     <Route path='/home' component={Main}/>
                     <Route path='/home/feed' component={IndiFeed}/>
+                    <Route path='/home/profile' component={Profile} />
+
                 </div>
             </Router>
 
