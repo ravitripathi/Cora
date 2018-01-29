@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import Indifeed from './indifeed';
+
 const Profile = ({ match }) => (
     <div className='container Profile'>
         <div className="panel-body" style={{ textAlign: 'center' }}>
@@ -10,11 +12,11 @@ const Profile = ({ match }) => (
             />
             <h1>Sample Name</h1>
             <div className="tags" value="'Followers'">
-                <span ng-bind="value" className="tags-title ng-binding" style={{textAlign: 'center'}}>Followers</span>
+                <span ng-bind="value" className="tags-title ng-binding" style={{ textAlign: 'center' }}>Followers</span>
             </div>
 
             <div className="tags" value="'Following'">
-                <span ng-bind="value" className="tags-title ng-binding" style={{textAlign: 'center'}}>Following</span>
+                <span ng-bind="value" className="tags-title ng-binding" style={{ textAlign: 'center' }}>Following</span>
             </div>
         </div>
 
@@ -48,6 +50,11 @@ const Profile = ({ match }) => (
                 </li>
 
             </ul>
+
+
+        </div>
+        <div style={{marginTop: '50px'}}>
+        <Indifeed/>
         </div>
     </div>
 )
