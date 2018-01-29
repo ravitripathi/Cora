@@ -53,8 +53,8 @@ const Profile = ({ match }) => (
 
 
         </div>
-        <div style={{marginTop: '50px'}}>
-        <Indifeed/>
+        <div className='row'>
+            <Indifeed />
         </div>
     </div>
 )
