@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 
-class IndiFeed extends Component{
+class IndiFeed extends Component {
+    state = {
+        active: null,
+    }
+
     render() {
         return (
             <div className='container IndiFeed'>
                 <div className="panel panel-warning">
                     <div className="panel-heading">
-                        <h3 className="panel-title">Feed Name</h3>
+                        <h3 id="title" className="panel-title">{this.state.active}</h3>
                     </div>
                     <div className="panel-body">
                         <div className='row'>
