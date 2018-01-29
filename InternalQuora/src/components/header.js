@@ -13,7 +13,7 @@ const Header = ({ match }) => (
                         <span className="icon-bar"></span>
                         <span className="icon-bar"></span>
                     </button>
-                    <a className="navbar-brand" href="#">Cora</a>
+                    <a className="navbar-brand" href="/home">Cora</a>
                 </div>
                 <ul className="nav navbar-nav navbar-right">
                     <li><input type="text" className="NavSearch form-control input" placeholder="Search" /></li>
