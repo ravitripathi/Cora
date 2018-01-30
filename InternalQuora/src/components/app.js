@@ -7,7 +7,7 @@ import Home from './home'
 import Main from './main'
 import IndiFeed from './indifeed'
 import Profile from './profile'
-
+import PostQuestion from './postquestion'
 import '../style/main.css'
 
 // {/*<div className="g-signin2" data-onsuccess="onSignIn"></div>*/}
@@ -31,7 +31,7 @@ class App extends Component {
                     <Route path='/home' component={Main}/>
                     <Route path='/home/feed' component={IndiFeed}/>
                     <Route path='/home/profile' component={Profile} />
-
+                    <Route path='/home/post' component={PostQuestion} />
                 </div>
             </Router>
 

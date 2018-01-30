@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-
 import Indifeed from './indifeed';
 import axios from 'axios';
 
@@ -12,35 +11,53 @@ class Profile extends Component {
         catactive: false,
         isFeedVisible: false,
         name: '0',
-        imageURL : '0',
-        followers : '0',
-        following : '0',
-        questions : '0',
-        category : '0',
-        answers : '0',
+        imageURL: '0',
+        followers: '0',
+        following: '0',
+        questions: '0',
+        category: '0',
+        answers: '0',
+        categoryList: []
     }
 
-    getProfile(user){
-        axios.post("http://10.177.7.61:8080/user/getProfile"+"?userId="+user)
-        .then(function (response) {
-            this.setState({name: response.data.name,
-                imageURL: response.data.imageUrl,
-                followers : response.data.followers,
-                following : response.data.following,
-                questions : response.data.questions,
-                category : response.data.category,
-                answers : response.data.questionAnsweredCount,
-            })
-        
-        
-        }.bind(this))
-        .catch(function (error) {
-            console.log(error);
-        });
+    componentWillMount() {
+        this.getProfile("jayantrana69@gmail.com")
+        this.getCategories("jayantrana69@gmail.com")
     }
-    
+
+    getCategories(user) {
+        axios.post("http://10.177.7.61:8080/user/findCategoryListName" + "?userId=" + user)
+            .then(function (response) {
+                console.log(response.data)
+                this.setState({
+                    categoryList: response.data
+                })
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+    getProfile(user) {
+        axios.post("http://10.177.7.61:8080/user/getProfile" + "?userId=" + user)
+            .then(function (response) {
+                console.log(response.data)
+                this.setState({
+                    name: response.data.name,
+                    imageURL: response.data.imageUrl,
+                    followers: response.data.followers,
+                    following: response.data.following,
+                    questions: response.data.questions,
+                    category: response.data.category,
+                    answers: response.data.questionAnsweredCount,
+                })
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     getQuestionsAnsByUser(user) {
-        axios.post("http://10.177.7.117:8080/questionAnswer/questionAnswerByUserId"+"?userId="+user)
+        axios.post("http://10.177.7.117:8080/questionAnswer/questionAnswerByUserId" + "?userId=" + user)
             .then(function (response) {
                 console.log(response);
             })
@@ -82,16 +99,14 @@ class Profile extends Component {
 
 
     render() {
-    
+
         const { name } = this.state
         const { imageURL } = this.state
-        const {followers} = this.state
-        const {following} = this.state
-        const {questions} = this.state
-        const {category} = this.state
-        const {answers} = this.state
-       
-        this.getProfile("jayantrana69@gmail.com")
+        const { followers } = this.state
+        const { following } = this.state
+        const { questions } = this.state
+        const { category } = this.state
+        const { answers } = this.state
 
         return (
             <div className='container Profile'>
@@ -129,7 +144,11 @@ class Profile extends Component {
                                 onClick={(e) => this.toggleClass("cat")}>
                                 <div className="buckets-content">
                                     <div className="bucket-heading">Categories subscribed to</div>
-                                    <div className="bucket-value">{category}</div>
+                                    <div className="bucket-value" tooltip-placement="bottom" uib-tooltip="On the bottom">{category}</div>
+                                    <div uib-tooltip-popup uib-title content="On the bottom" origin-scope="origScope" className="tooltip ng-scope ng-isolate-scope bottom fade in" tooltip-animation-class="fade" uib-tooltip-classes="" ng-class="{ in: isOpen }" style={{ top: '6616px', left: '583px' }}>>
+                                        <div className="tooltip-inner ng-binding" ng-bind="content">On the bottom</div>
+                                    </div>
+
                                 </div>
                             </div>
                         </li>

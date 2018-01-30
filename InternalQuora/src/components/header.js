@@ -18,7 +18,7 @@ const Header = ({ match }) => (
                 <ul className="nav navbar-nav navbar-right">
                     <li><input type="text" className="NavSearch form-control input" placeholder="Search" /></li>
                     <li><a href="#"><FontAwesome name='bell'/></a></li>
-                    <li><a href="#"><FontAwesome name='pencil-square-o'/>Answers</a></li>
+                    <li><a href="/home/post"><FontAwesome name='pencil-square-o'/>Post Question</a></li>
                     <li className="dropdown">
                         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
                         <ul className="dropdown-menu">
