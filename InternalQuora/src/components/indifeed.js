@@ -7,9 +7,11 @@ const INFEED_PORT = 8080
 const QUES_END = '/questionAnswer/getQuestionByQuestionId/?questionId='
 const ANSW_END = '/questionAnswer/getAnswersByQuestionId/'
 
+<<<<<<< HEAD
 class IndiFeed extends Component {
     state = {
         active: null,
+=======
 class IndiFeed extends Component{
 
     state = {
@@ -64,6 +66,7 @@ class IndiFeed extends Component{
             .catch(function (error) {
                 console.log(error)
             })
+>>>>>>> master
     }
 
     render() {
@@ -73,8 +76,11 @@ class IndiFeed extends Component{
             <div className='container IndiFeed'>
                 <div className="panel panel-warning">
                     <div className="panel-heading">
+<<<<<<< HEAD
                         <h3 id="title" className="panel-title">{this.state.active}</h3>
+=======
                         <h3 className="panel-title">{question.title}</h3>
+>>>>>>> master
                     </div>
                     <div className="panel-body">
                         <div className='row'>

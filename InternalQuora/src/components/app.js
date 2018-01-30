@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import { BrowserRouter as Router, Switch, Link, Route, browserHistory } from 'react-router-dom'
 
 import Test from '../components/test'
@@ -17,7 +16,6 @@ import '../style/main.css'
 class App extends Component {
 
     state = {
-        isLoggedIn: false
         isLoggedIn: false,
         user: {
 
@@ -25,7 +23,6 @@ class App extends Component {
     }
 
     componentDidMount() {
-
         console.log('Reach')
         // axios({
         //     method: 'get',
@@ -42,7 +39,6 @@ class App extends Component {
     render() {
 
         return (
-            <Router>
             <Router history={browserHistory}>
                 <div>
                     <Route exact path='/' component={Home} />
@@ -65,4 +61,4 @@ class App extends Component {
 
 }
 
-    export default Appexport default App
+export default App
