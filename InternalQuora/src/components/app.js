@@ -6,8 +6,9 @@ import Test from '../components/test'
 import Home from './home'
 import Main from './main'
 import IndiFeed from './indifeed'
+import Profile from './profile'
+import PostQuestion from './postquestion'
 import Notification from './notification'
-
 import '../style/main.css'
 
 // {/*<div className="g-signin2" data-onsuccess="onSignIn"></div>*/}
@@ -40,6 +41,11 @@ class App extends Component {
         return (
             <Router history={browserHistory}>
                 <div>
+                    <Route exact path='/' component={Home} />
+                    <Route path='/home' component={Main}/>
+                    <Route path='/home/feed' component={IndiFeed}/>
+                    <Route path='/home/profile' component={Profile} />
+                    <Route path='/home/post' component={PostQuestion} />
                     <Switch>
                         <Route exact path='/' component={Home} />
                         <Route exact path='/home' component={Main}/>

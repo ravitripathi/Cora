@@ -64,6 +64,14 @@
     /*border: 1px solid #BEA29C;*/
 }
 
+.Profile {
+    position: absolute;
+    top: 70px;
+    width: 90%;
+    margin-left: 55px;
+    /*border: 1px solid #BEA29C;*/
+}
+
 .Feed .panel-heading {
     padding: 10px;
 }
@@ -74,7 +82,7 @@
 }
 
 .IndiFeed {
-    position: absolute;
+    margin-top: 55px;
     top: 70px;
     width: 90%;
     margin-left: 50px;
