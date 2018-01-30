@@ -12,9 +12,11 @@ const sampleTags = List(
         value: t
     }))
 )
+var questionId;
 
 class PostQuestion extends Component {
 
+  
     state = {
         showModal: false,
         showDrop: false,
@@ -32,7 +34,7 @@ class PostQuestion extends Component {
         this.setState({ file: e.target.files[0] })
         console.log(e.target.files[0]);
         var bodyFormData = new FormData();
-        bodyFormData.set('questionId',this.state.questionId);
+        bodyFormData.set('questionId',questionId);
         bodyFormData.set('file', e.target.files[0])
         axios({
             method: 'post',
@@ -86,6 +88,7 @@ class PostQuestion extends Component {
         }).then(function (response) {
             console.log(response.data)
             this.setState({ questionId: response.data })
+            questionId = response.data;
             this.simpleDialog.show()
         }.bind(this))
             .catch(function (error) {
