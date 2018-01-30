@@ -20,11 +20,37 @@ class PostQuestion extends Component {
         showDrop: false,
         dropdownVal: 'Category',
         tags: sampleTags,
-        selected:  sampleTags.take(0),
-        finalTAG : []
-
+        selected: sampleTags.take(0),
+        finalTAG: [],
+        file: null,
+        questionId: null,
     }
 
+
+
+    handleFile(e) {
+        this.setState({ file: e.target.files[0] })
+        console.log(e.target.files[0]);
+        var bodyFormData = new FormData();
+        bodyFormData.set('questionId',this.state.questionId);
+        bodyFormData.set('file', e.target.files[0])
+        axios({
+            method: 'post',
+            url: 'http://10.177.7.117:8080/questionAnswer/addQuestionImage',
+            data: bodyFormData,
+            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        })
+            .then(function (response) {
+                alert('File uploaded!')
+                console.log(response);
+            })
+            .catch(function (response) {
+                //handle error
+                alert('Upload failed!')
+                console.log(response);
+            });
+
+    }
 
     toggleDrop() {
         let current = this.state.showDrop;
@@ -42,17 +68,10 @@ class PostQuestion extends Component {
 
         let val = this.state.selected.toJS();
         let valarr = []
-        for (var i=0; i<val.length; i++) {
+        for (var i = 0; i < val.length; i++) {
             valarr.push(val[i].value)
         }
-        this.setState({finalTAG: valarr})
-        console.log(valarr)
-
-        
-        // for(var i=0; i<his.state.selected.toJS().length; i++)
-        // console.log(this.state.selected.toJS().get(i))
-
-        // console.log(title + ":" + content)
+    
         axios({
             method: 'post',
             url: 'http://10.177.7.117:8080/questionAnswer/addQuestion',
@@ -62,16 +81,19 @@ class PostQuestion extends Component {
                 "content": content,
                 "active": true,
                 "category": this.state.dropdownVal,
-                "tags": this.state.valarr
+                "tags": valarr
             }
         }).then(function (response) {
             console.log(response.data)
+            this.setState({ questionId: response.data })
+            this.simpleDialog.show()
         }.bind(this))
             .catch(function (error) {
                 console.log(error);
+                alert('Could not add Question')
             });
 
-        this.simpleDialog.show()
+       
     }
     render() {
 
@@ -98,7 +120,6 @@ class PostQuestion extends Component {
 
 
         return (
-
             <div className='container Profile'>
                 <div className="panel-body" style={{ textAlign: 'center' }}>
                     <h1>Post a new Question</h1>
@@ -173,8 +194,10 @@ class PostQuestion extends Component {
                         </button>
 
                         <SkyLight
-                            hideOnOverlayClicked ref={ref => this.simpleDialog = ref} title="Hi, I'm a simple modal">
-                            Hello, I dont have any callback.
+                            hideOnOverlayClicked ref={ref => this.simpleDialog = ref} title="Drop an image to add to your question">
+                            <div>
+                                <input type="file" onChange={(e) => this.handleFile(e)} />
+                            </div>
                         </SkyLight>
 
 
