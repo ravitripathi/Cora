@@ -1,8 +1,28 @@
 import React, { Component } from 'react'
 import { Link, Route } from 'react-router-dom'
 import Main from "./main";
+import axios from 'axios'
 
 class Home extends Component {
+
+    handleClick = () => {
+
+    }
+
+    componentDidMount() {
+        console.log('Reach Home')
+        // axios({
+        //     method: 'get',
+        //     url: 'http://localhost:3000/slack'
+        // })
+        //     .then(function (response) {
+        //         console.log(response)
+        //     }.bind(this))
+        //     .catch(function (error) {
+        //         console.log(error)
+        //     })
+    }
+
     render() {
         return (
             <div className='container Home'>
@@ -13,18 +33,14 @@ class Home extends Component {
                             Knowledge.Simplified!!!
                         </div>
                         <div className='OauthButton'>
-                            <Link to={`/home`}>
-                                <button className="btn-integration">
-                                    <span className="icon slack"></span>
-                                    <span>Slack</span>
-                                </button>
-                            </Link>
-                            <Link to={`/home`}>
-                                <button className="btn-integration">
-                                    <span className="icon google"></span>
-                                    <span>Google</span>
-                                </button>
-                            </Link>
+                            <a className="btn btn-integration" href='https://slack.com/oauth/authorize?scope=identity.basic+identity.email+identity.avatar&client_id=304468210898.305541541543'>
+                                <span className="icon slack"></span>
+                                <span>Slack</span>
+                            </a>
+                            <a className="btn btn-integration">
+                                <span className="icon google"></span>
+                                <span>Google</span>
+                            </a>
                         </div>
                     </div>
                 </div>

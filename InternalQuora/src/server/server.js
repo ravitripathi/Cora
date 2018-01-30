@@ -12,7 +12,10 @@ app.set('view engine', 'ejs')
 
 app.use(cors({origin: 'http://localhost:8080'}))
 
-
+const BASE_URL = 'http://'
+const LOGIN_IP = '10.177.7.61'
+const LOGIN_PORT = 8080
+const LOGIN_END = '/user/login'
 
 const PORT = 3000
 
@@ -50,9 +53,13 @@ app.get('/slack/', (req, res) => {
     })
         .then(function (response) {
 
-            console.log(response)
+            let name = response.data.user.name
+            let userId = response.data.user.email
+            let imageUrl = response.data.user.image_24
+            let id = response.data.user.id
+            // console.log(response.data.user.name)
             let token = response.data.access_token
-            console.log(token)
+            // console.log(token)
             axios({
                 method: 'get',
                 url: 'https://slack.com/api/users.profile.get?token=' + token,
@@ -61,15 +68,36 @@ app.get('/slack/', (req, res) => {
                 }
             })
                 .then(function (resp) {
+                    const userDetail = {
+                        name: name,
+                        imageUrl: imageUrl,
+                        userId: userId,
+                        id: id
+                    }
+                    // console.log(resp)
+                    axios({
+                        method: 'post',
+                        url: BASE_URL + LOGIN_IP + ':' + LOGIN_PORT + LOGIN_END,
+                        data: {
+                            name: name,
+                            imageUrl: imageUrl,
+                            userId: userId,
+                            role: 1
+                        }
+                    })
+                        .then(function (respo) {
+                            console.log(respo)
+                        })
                     //console.log(resp.data.profile.email)
-                    res.redirect('http://localhost:8080')
+                    // res.json(userDetail);
+                    res.redirect('http://localhost:8080/home')
                 })
                 .catch(function (error) {
-                    console.log(error)
+                    // console.log(error)
                 })
         })
         .catch(function (err) {
-            console.log(err)
+            // console.log(err)
         })
 })
 
