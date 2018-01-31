@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import Indifeed from './indifeed';
 import axios from 'axios';
 
+var USER = JSON.parse(localStorage.getItem('user'))
+
 class Profile extends Component {
 
     state = {
@@ -10,7 +12,8 @@ class Profile extends Component {
         aactive: false,
         catactive: false,
         isFeedVisible: false,
-        name: '0',
+        followClicked: false,
+        name: '',
         imageURL: '0',
         followers: '0',
         following: '0',
@@ -22,8 +25,29 @@ class Profile extends Component {
 
     componentWillMount() {
     
-        this.getProfile("jayantrana69@gmail.com")
-        this.getCategories("jayantrana69@gmail.com")
+        let tempuser = this.props.match.params.userId
+        console.log(tempuser)
+        this.getProfile(tempuser)
+        this.checkFollower(tempuser)
+        this.getCategories(tempuser)
+    }
+
+    checkFollower(user) {
+        axios({
+            method: 'post',
+            url: 'http://10.177.7.61:8080/user/isFollowing?followerId=' + USER.userId + '&followeeId=' + this.props.match.params.userId
+        })
+        .then(function (response){
+            console.log(response)
+            if(response.data == true) {
+                this.setState({followClicked: true})
+            } else {
+                this.setState({followClicked: false})
+            }
+        }.bind(this))
+        .catch(function (error) {
+            console.log(error)
+        })
     }
 
     getCategories(user) {
@@ -66,6 +90,20 @@ class Profile extends Component {
                 console.log(error);
             });
     };
+
+    followUser = (e) => {
+        axios({
+            method: 'post',
+            url: 'http://10.177.7.61:8080/user/follow?followerId=' + USER.userId + '&followeeId=' + this.props.match.params.userId
+        })
+        .then(function (response){
+            console.log(response)
+            this.setState({followClicked: true})
+        }.bind(this))
+        .catch(function (error) {
+            console.log(error)
+        })
+    }
 
     toggleClass(variable) {
         console.log(variable)
@@ -124,6 +162,20 @@ class Profile extends Component {
                     <div className="tags" value="'Following'">
                         <span ng-bind="value" className="tags-title ng-binding" style={{ textAlign: 'center' }}>Following: {following}</span>
                     </div>
+
+                    {
+                        this.props.match.params.userId != USER.userId ?
+                        <div className="tags" value="'Following'">
+                        {this.state.followClicked ? 
+                            <input type="submit" name="" disabled onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm btn-info" />
+                            :
+                            <input type="submit" name="" onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm btn-info" />
+                        }
+                    
+                    </div> :
+                    ''
+                    }
+                    
                 </div>
 
                 <div className="bucket-container ng-scope" style={{ textAlign: 'center', margin: '-10px' }}>
