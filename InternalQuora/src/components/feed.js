@@ -89,38 +89,41 @@ class Feed extends Component {
         ]
     }
 
-    componentDidMount() {
-        console.log(this.state.user.userId)
-        axios({
-            method: 'post',
-            url: BASE_URL + FEED_IP + ':' + FEED_PORT + FEED_END + '?user_id=' + this.state.user.userId
-        })
-            .then(function (response) {
-                console.log(response)
-                let data = response.data
-                this.setState({category: data})
-                this.setState({sport: this.state.category.Sport})
-                this.setState({news: this.state.category.News})
-                this.setState({general: this.state.category.General})
-                this.setState({technology: this.state.category.Technology})
-                this.setState({food: this.state.category.Food})
-                console.log(this.state.sport)
-                // console.log(this.state.category.Sport)
-                // console.log(data)
-                // for (var i=0; i<data.length; i++) {
-                //     tempfeed.push({
-                //         category: data[i].category,
-                //         questionId: data[i].questionId,
-                //         tags: data[i].tags,
-                //         title: data[i].title
-                //     })
-                // }
-                // this.setState({searched: tempfeed})
-            }.bind(this))
-            .catch(function (error) {
-                console.log(error)
-            })
+    componentWillMount() {
+        console.log('feed')
+        console.log(this.props)
 
+        if(this.state.user.userId != null) {
+            axios({
+                method: 'post',
+                url: BASE_URL + FEED_IP + ':' + FEED_PORT + FEED_END + '?user_id=' + this.state.user.userId
+            })
+                .then(function (response) {
+                    console.log(response)
+                    let data = response.data
+                    this.setState({category: data})
+                    this.setState({sport: this.state.category.Sport})
+                    this.setState({news: this.state.category.News})
+                    this.setState({general: this.state.category.General})
+                    this.setState({technology: this.state.category.Technology})
+                    this.setState({food: this.state.category.Food})
+                    console.log(this.state.sport)
+                    // console.log(this.state.category.Sport)
+                    // console.log(data)
+                    // for (var i=0; i<data.length; i++) {
+                    //     tempfeed.push({
+                    //         category: data[i].category,
+                    //         questionId: data[i].questionId,
+                    //         tags: data[i].tags,
+                    //         title: data[i].title
+                    //     })
+                    // }
+                    // this.setState({searched: tempfeed})
+                }.bind(this))
+                .catch(function (error) {
+                    console.log(error)
+                })
+        }
 
     }
 

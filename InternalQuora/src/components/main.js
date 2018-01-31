@@ -5,19 +5,21 @@ import { debounce } from 'throttle-debounce';
 
 
 import Header from './header'
-import Feed from './feed'
-import Search from "./search";
 
 const BASE_URL = 'http://'
 const LOGIN_IP = '10.177.7.61'
 const LOGIN_PORT = 8080
 const LOGIN_END = '/user/login'
 
+const FEED_IP = '10.177.7.86'
+const FEED_PORT = 8080
+const FEED_END = '/notifications/feed'
+
 const SEARCH_IP = '10.177.7.93'
 const SEARCH_PORT = 8080
 const SEARCH_END = '/question/autoSuggest/'
 
-const USER = JSON.parse(localStorage.getItem('user'))
+var USER = JSON.parse(localStorage.getItem('user'))
 
 class Main extends Component {
 
@@ -31,7 +33,82 @@ class Main extends Component {
             tags: [],
             title: '',
             userName: ''
-        }]
+        }],
+        category: [{}],
+        feedEntered: false,
+        sport: [{
+            active: true,
+            category: '',
+            content: '',
+            imageUrl: '',
+            questionId: '',
+            tags: [],
+            timestamp: '',
+            title: '',
+            userId: '',
+            userName: ''
+        }],
+        food: [{
+            active: true,
+            category: '',
+            content: '',
+            imageUrl: '',
+            questionId: '',
+            tags: [],
+            timestamp: '',
+            title: '',
+            userId: '',
+            userName: ''
+        }],
+        technology: [{
+            active: true,
+            category: '',
+            content: '',
+            imageUrl: '',
+            questionId: '',
+            tags: [],
+            timestamp: '',
+            title: '',
+            userId: '',
+            userName: ''
+        }],
+        news: [{
+            active: true,
+            category: '',
+            content: '',
+            imageUrl: '',
+            questionId: '',
+            tags: [],
+            timestamp: '',
+            title: '',
+            userId: '',
+            userName: ''
+        }],
+        general: [{
+            active: true,
+            category: '',
+            content: '',
+            imageUrl: '',
+            questionId: '',
+            tags: [],
+            timestamp: '',
+            title: '',
+            userId: '',
+            userName: ''
+        }],
+        feed: [
+            {
+                active: true,
+                category: '',
+                content: '',
+                imageUrl: '',
+                questionId: '',
+                tags: '',
+                timestamp: '',
+                title: '',
+                userId: ''
+            }
+        ]
     }
 
     // callSearch(event) {
@@ -102,15 +179,11 @@ class Main extends Component {
         })()
     }
 
-    componentDidMount() {
+    componentWillMount() {
 
-        if(this.state.searched[0].questionId == ''){
-            this.state.searched.splice(0, 1);
-        }
+        console.log('Component Will Mount')
 
-        console.log('Main' + this.state.isSearchOn)
-
-        if (!this.state.user) {
+        if (!USER || this.state.user == null) {
             let code = this.props.location.search;
             code = code.split('=')[1]
             code = code.split('&')[0]
@@ -125,33 +198,78 @@ class Main extends Component {
             })
                 .then(function (response) {
 
-
+                    console.log(response)
                     let name = response.data.user.name
                     let userId = response.data.user.email
                     let imageUrl = response.data.user.image_24
                     let id = response.data.user.id
 
-                    this.setState({user: {name: name, userId: userId, imageUrl: imageUrl, id: id}})
-                    console.log(this.state.user)
-                    localStorage.setItem('user', JSON.stringify(this.state.user));
-                    let token = response.data.access_token
-                    console.log(token)
-                    axios({
-                        method: 'post',
-                        url: BASE_URL + LOGIN_IP + ':' + LOGIN_PORT + LOGIN_END,
-                        data: {
+
+                    // this.setState({user: {name: name, userId: userId, imageUrl: imageUrl, id: id}})
+                    // console.log(this.state.user)
+
+                    console.log(userId)
+                    if(userId != null) {
+                        let tempuser = {
                             name: name,
-                            imageUrl: imageUrl,
                             userId: userId,
-                            role: 1
+                            id: id,
+                            imageUrl: imageUrl
                         }
-                    })
-                        .then(function (respo) {
-                            console.log(respo)
+
+                        localStorage.setItem('user', JSON.stringify(tempuser));
+                        let token = response.data.access_token
+
+                        axios({
+                            method: 'post',
+                            url: BASE_URL + LOGIN_IP + ':' + LOGIN_PORT + LOGIN_END,
+                            data: {
+                                name: name,
+                                imageUrl: imageUrl,
+                                userId: userId,
+                                role: 1
+                            }
                         })
-                        .catch(function (er) {
-                            console.log(er)
+                            .then(function (respo) {
+                                console.log(respo)
+
+                            })
+                            .catch(function (er) {
+                                console.log(er)
+                            })
+
+                        axios({
+                            method: 'post',
+                            url: BASE_URL + FEED_IP + ':' + FEED_PORT + FEED_END + '?user_id=' + userId
                         })
+                            .then(function (response) {
+                                console.log(response)
+                                let data = response.data
+                                this.setState({feedEntered: true})
+                                this.setState({category: data})
+                                this.setState({sport: this.state.category.Sport})
+                                this.setState({news: this.state.category.News})
+                                this.setState({general: this.state.category.General})
+                                this.setState({technology: this.state.category.Technology})
+                                this.setState({food: this.state.category.Food})
+                                console.log(this.state.sport)
+                                // console.log(this.state.category.Sport)
+                                // console.log(data)
+                                // for (var i=0; i<data.length; i++) {
+                                //     tempfeed.push({
+                                //         category: data[i].category,
+                                //         questionId: data[i].questionId,
+                                //         tags: data[i].tags,
+                                //         title: data[i].title
+                                //     })
+                                // }
+                                // this.setState({searched: tempfeed})
+                            }.bind(this))
+                            .catch(function (error) {
+                                console.log(error)
+                            })
+                    }
+
                     // console.log(token)
                     // axios({
                     //     method: 'get',
@@ -190,17 +308,60 @@ class Main extends Component {
             //     .catch(function (error) {
             //         console.log(error)
             //     })
+        } else {
+
+            axios({
+                method: 'post',
+                url: BASE_URL + FEED_IP + ':' + FEED_PORT + FEED_END + '?user_id=' + USER.userId
+            })
+                .then(function (response) {
+                    console.log(response)
+                    let data = response.data
+                    this.setState({feedEntered: true})
+                    this.setState({category: data})
+                    this.setState({sport: this.state.category.Sport})
+                    this.setState({news: this.state.category.News})
+                    this.setState({general: this.state.category.General})
+                    this.setState({technology: this.state.category.Technology})
+                    this.setState({food: this.state.category.Food})
+                    console.log(this.state.sport)
+                    // console.log(this.state.category.Sport)
+                    // console.log(data)
+                    // for (var i=0; i<data.length; i++) {
+                    //     tempfeed.push({
+                    //         category: data[i].category,
+                    //         questionId: data[i].questionId,
+                    //         tags: data[i].tags,
+                    //         title: data[i].title
+                    //     })
+                    // }
+                    // this.setState({searched: tempfeed})
+                }.bind(this))
+                .catch(function (error) {
+                    console.log(error)
+                })
         }
+    }
+
+    componentDidMount() {
+
+        if(this.state.searched[0].questionId == ''){
+            this.state.searched.splice(0, 1);
+        }
+
+        console.log('Main' + this.state.isSearchOn)
+
+
 
 
     }
 
     render() {
-        const { user, isSearchOn, searched } = this.state
+        const { category, isSearchOn, searched, sport, news, food, general, technology } = this.state
 
         return (
             <div className='container Main'>
-                <Header user={user} addSearch={this.addSearch.bind(this)} />
+                <Header user={USER} addSearch={this.addSearch.bind(this)} />
                 {isSearchOn ?
                     <div className='container Search'>
                         <div className="panel panel-warning">
@@ -230,7 +391,94 @@ class Main extends Component {
                             </div>
                         </div>
                     </div> :
-                    <Route exact path='/home' component={Feed}/>
+                    <div className='container Feed'>
+                        <div className="panel panel-warning">
+                            <div className="panel-heading">
+                                <h3 className="panel-title">Top Feed</h3>
+                            </div>
+                            {this.state.feedEntered ?
+                                <div className="panel-body">
+                                    <div className='row'>
+                                        {sport.map((row, index) => (
+                                            <div className='col-lg-12'>
+                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <h6>Category: {row.category}</h6>
+                                                <p>{row.content}</p>
+                                                <p>Tags :
+                                                    {row.tags.map((item) => (
+                                                        <span className='custom-label' key={item}>{item}</span>
+                                                    ))}
+                                                </p>
+                                                <hr />
+                                            </div>
+                                        ))}
+                                        {news.map((row, index) => (
+                                            <div className='col-lg-12'>
+                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <h6>Category: {row.category}</h6>
+                                                <p>{row.content}</p>
+                                                <p>Tags :
+                                                    {row.tags.map((item) => (
+                                                        <span className='custom-label' key={item}>{item}</span>
+                                                    ))}
+                                                </p>
+                                                <hr />
+                                            </div>
+                                        ))}
+                                        {technology.map((row, index) => (
+                                            <div className='col-lg-12'>
+                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <h6>Category: {row.category}</h6>
+                                                <p>{row.content}</p>
+                                                <p>Tags :
+                                                    {row.tags.map((item) => (
+                                                        <span className='custom-label' key={item}>{item}</span>
+                                                    ))}
+                                                </p>
+                                                <hr />
+                                            </div>
+                                        ))}
+                                        {general.map((row, index) => (
+                                            <div className='col-lg-12'>
+                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <h6>Category: {row.category}</h6>
+                                                <p>{row.content}</p>
+                                                <p>Tags :
+                                                    {row.tags.map((item) => (
+                                                        <span className='custom-label' key={item}>{item}</span>
+                                                    ))}
+                                                </p>
+                                                <hr />
+                                            </div>
+                                        ))}
+                                        {food.map((row, index) => (
+                                            <div className='col-lg-12'>
+                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <h6>Category: {row.category}</h6>
+                                                <p>{row.content}</p>
+                                                <p>Tags :
+                                                    {row.tags.map((item) => (
+                                                        <span className='custom-label' key={item}>{item}</span>
+                                                    ))}
+                                                </p>
+                                                <hr />
+                                            </div>
+                                        ))}
+                                        {/*<div className='col-lg-4'>*/}
+                                        {/*<img className='img-responsive' src='../img/2013-lebron-11-away-commercial-04.jpg' />*/}
+                                        {/*</div>*/}
+                                    </div> :
+
+                                </div> :
+                                ''
+                            }
+                        </div>
+                    </div>
                 }
             </div>
         )
