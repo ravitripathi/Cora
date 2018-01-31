@@ -99,6 +99,7 @@ class Profile extends Component {
         .then(function (response){
             console.log(response)
             this.setState({followClicked: true})
+            this.getProfile(this.props.match.params.userId)
         }.bind(this))
         .catch(function (error) {
             console.log(error)
