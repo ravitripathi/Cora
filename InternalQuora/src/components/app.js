@@ -10,6 +10,8 @@ import Profile from './profile'
 import PostQuestion from './postquestion'
 import Notification from './notification'
 import '../style/main.css'
+import Admin from './admin';
+import Comment from './comment';
 
 // {/*<div className="g-signin2" data-onsuccess="onSignIn"></div>*/}
 
@@ -46,6 +48,8 @@ class App extends Component {
                     <Route path='/home/feed' component={IndiFeed}/>
                     <Route path='/home/profile' component={Profile} />
                     <Route path='/home/post' component={PostQuestion} />
+                    <Route path='/home/admin' component={Admin}/>
+                    <Route path='/home/comment' component={Comment}/>
                     <Switch>
                         <Route exact path='/' component={Home} />
                         <Route exact path='/home' component={Main}/>

@@ -100,7 +100,7 @@ class IndiFeed extends Component {
                                     <hr />
                                 </div>
                             ))}
-                            <textarea class="form-control AnswerQues" rows="4" max-lines="10" placeholder="Add Answer"></textarea>
+                            <textarea className="form-control AnswerQues" rows="4" max-lines="10" placeholder="Add Answer"></textarea>
                         </div>
                     </div>
                 </div>
