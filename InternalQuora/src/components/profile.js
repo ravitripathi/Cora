@@ -20,11 +20,20 @@ class Profile extends Component {
         questions: '0',
         category: '0',
         answers: '0',
-        categoryList: []
+        categoryList: [],
+
+        feedData: [{
+            questionId: '',
+            title: '',
+            userId: '',
+            content: '',
+            timestamp: '',
+        }]
+
     }
 
     componentWillMount() {
-    
+
         let tempuser = this.props.match.params.userId
         console.log(tempuser)
         this.getProfile(tempuser)
@@ -37,17 +46,17 @@ class Profile extends Component {
             method: 'post',
             url: 'http://10.177.7.61:8080/user/isFollowing?followerId=' + USER.userId + '&followeeId=' + this.props.match.params.userId
         })
-        .then(function (response){
-            console.log(response)
-            if(response.data == true) {
-                this.setState({followClicked: true})
-            } else {
-                this.setState({followClicked: false})
-            }
-        }.bind(this))
-        .catch(function (error) {
-            console.log(error)
-        })
+            .then(function (response) {
+                console.log(response)
+                if (response.data == true) {
+                    this.setState({ followClicked: true })
+                } else {
+                    this.setState({ followClicked: false })
+                }
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error)
+            })
     }
 
     getCategories(user) {
@@ -81,11 +90,16 @@ class Profile extends Component {
             });
     }
 
-    getQuestionsAnsByUser(user) {
-        axios.post("http://10.177.7.117:8080/questionAnswer/questionAnswerByUserId" + "?userId=" + user)
+    getQuestionsAskedByUser(user) {
+
+        const data = new FormData();
+        data.append('userId', user);
+        axios.post("http://10.177.7.117:8080/questionAnswer/getQuestionsByUserId", data)
             .then(function (response) {
                 console.log(response);
-            })
+                let data = response.data
+                this.setState({ feedData: data})
+            }.bind(this))
             .catch(function (error) {
                 console.log(error);
             });
@@ -96,14 +110,14 @@ class Profile extends Component {
             method: 'post',
             url: 'http://10.177.7.61:8080/user/follow?followerId=' + USER.userId + '&followeeId=' + this.props.match.params.userId
         })
-        .then(function (response){
-            console.log(response)
-            this.setState({followClicked: true})
-            this.getProfile(this.props.match.params.userId)
-        }.bind(this))
-        .catch(function (error) {
-            console.log(error)
-        })
+            .then(function (response) {
+                console.log(response)
+                this.setState({ followClicked: true })
+                this.getProfile(this.props.match.params.userId)
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error)
+            })
     }
 
     toggleClass(variable) {
@@ -113,25 +127,31 @@ class Profile extends Component {
                 {
                     qactive: false,
                     aactive: false,
-                    catactive: true
+                    catactive: true,
+                    isFeedVisible: false,
                 })
 
         } else if (variable == 'questions') {
             this.setState({
                 qactive: true,
                 aactive: false,
-                catactive: false
+                catactive: false,
+                isFeedVisible: true,
             })
+            this.getQuestionsAskedByUser(this.props.match.params.userId);
+
+
         } else {
             this.setState({
                 qactive: false,
                 aactive: true,
-                catactive: false
+                catactive: false,
+                isFeedVisible: false,
             })
         }
 
-        this.setState({ isFeedVisible: true })
-        this.getQuestionsAnsByUser("jayantrana69@gmail.com");
+
+
         // this.getProfile("jayantrana69@gmail.com");
         // Indifeed.setState({active:variable});
     };
@@ -147,6 +167,7 @@ class Profile extends Component {
         const { questions } = this.state
         const { category } = this.state
         const { answers } = this.state
+        const {feedData} = this.state
 
         return (
             <div className='container Profile'>
@@ -166,17 +187,17 @@ class Profile extends Component {
 
                     {
                         this.props.match.params.userId != USER.userId ?
-                        <div className="tags" value="'Following'">
-                        {this.state.followClicked ? 
-                            <input type="submit" name="" disabled onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm btn-info" />
-                            :
-                            <input type="submit" name="" onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm btn-info" />
-                        }
-                    
-                    </div> :
-                    ''
+                            <div className="tags" value="'Following'">
+                                {this.state.followClicked ?
+                                    <input type="submit" name="" disabled onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm btn-info" />
+                                    :
+                                    <input type="submit" name="" onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm btn-info" />
+                                }
+
+                            </div> :
+                            ''
                     }
-                    
+
                 </div>
 
                 <div className="bucket-container ng-scope" style={{ textAlign: 'center', margin: '-10px' }}>
@@ -223,8 +244,25 @@ class Profile extends Component {
 
                 </div>
                 {!this.state.isFeedVisible ?
-                    '' : <div className='row'>
-                        <Indifeed />
+                    '' :
+                    <div className='container Feed' style={{ marginTop: '400px' }}>
+                        <div className="panel panel-warning">
+                            <div className="panel-heading">
+                                <h3 className="panel-title">Top Feed</h3>
+                            </div>
+                            <div className="panel-body">
+                                <div className='row'>
+                                    {feedData.map((row, index) => (
+                                        <div className='col-lg-12'>
+                                          <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                            <p>{row.content}</p>
+                                            <p>{row.timestamp}</p>
+                                        </div>
+                                    ))}
+                                    <hr/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 }
 
