@@ -36,6 +36,7 @@ class Main extends Component {
         }],
         category: [{}],
         feedEntered: false,
+        showFeed: false,
         sport: [{
             active: true,
             category: '',
@@ -145,8 +146,10 @@ class Main extends Component {
             console.log('value :: ', event.target.value);
             if (event.target.value == '') {
                 this.setState({isSearchOn: false})
+                this.setState({showFeed: true})
             } else {
                 this.setState({isSearchOn: true})
+                this.setState({showFeed: false})
                 axios({
                     method: 'get',
                     url: BASE_URL + SEARCH_IP + ':' + SEARCH_PORT + SEARCH_END + event.target.value
@@ -246,6 +249,7 @@ class Main extends Component {
                                 console.log(response)
                                 let data = response.data
                                 this.setState({feedEntered: true})
+                                this.setState({showFeed: true})
                                 this.setState({category: data})
                                 this.setState({sport: this.state.category.Sport})
                                 this.setState({news: this.state.category.News})
@@ -318,6 +322,7 @@ class Main extends Component {
                     console.log(response)
                     let data = response.data
                     this.setState({feedEntered: true})
+                    this.setState({showFeed: true})
                     this.setState({category: data})
                     this.setState({sport: this.state.category.Sport})
                     this.setState({news: this.state.category.News})
@@ -357,7 +362,7 @@ class Main extends Component {
     }
 
     render() {
-        const { category, isSearchOn, searched, sport, news, food, general, technology } = this.state
+        const { showFeed, isSearchOn, searched, sport, news, food, general, technology } = this.state
 
         return (
             <div className='container Main'>
@@ -374,7 +379,8 @@ class Main extends Component {
                                         {searched.map((row, index) => (
                                             <div className='col-lg-12' eventKey={index} key={index}>
                                                 <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <Link to={`/home/profile`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+
                                                 <h6>Category: {row.category}</h6>
                                                 <div>
                                                     <p>Tags :
@@ -391,6 +397,10 @@ class Main extends Component {
                             </div>
                         </div>
                     </div> :
+                    ''
+                }
+
+                {showFeed ?
                     <div className='container Feed'>
                         <div className="panel panel-warning">
                             <div className="panel-heading">
@@ -478,7 +488,8 @@ class Main extends Component {
                                 ''
                             }
                         </div>
-                    </div>
+                    </div> :
+                    ''
                 }
             </div>
         )
