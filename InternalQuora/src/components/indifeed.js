@@ -46,6 +46,7 @@ class IndiFeed extends Component {
             axios.post('http://10.177.7.117:8080/questionAnswer/addAnswer', data)
                 .then(function (response) {
                     console.log(response.data)
+                    alert('Thanks for answering')
                 }.bind(this))
                 .catch(function (error) {
                     console.log(error);
@@ -56,6 +57,7 @@ class IndiFeed extends Component {
             axios.post('http://10.177.7.117:8080/questionAnswer/addAnswerWithoutImage', data)
                 .then(function (response) {
                     console.log(response.data)
+                    alert('Thanks for answering')
                 }.bind(this))
                 .catch(function (error) {
                     console.log(error);
