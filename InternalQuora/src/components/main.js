@@ -379,7 +379,7 @@ class Main extends Component {
                                         {searched.map((row, index) => (
                                             <div className='col-lg-12' eventKey={index} key={index}>
                                                 <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <Link to={`/home/profile`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userId}{row.userName}</a></span></Link>
 
                                                 <h6>Category: {row.category}</h6>
                                                 <div>

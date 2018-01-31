@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import FontAwesome from 'react-fontawesome'
-
 class Header extends Component {
 
     componentWillMount() {
@@ -28,7 +27,7 @@ class Header extends Component {
                         <ul className="nav navbar-nav navbar-right">
                             <li><input type="text" className="NavSearch form-control input" placeholder="Search" onChange={this.props.addSearch} /></li>
                             <li><a href="#"><FontAwesome name='bell'/></a></li>
-                            <li><a href="#"><FontAwesome name='pencil-square-o'/>Answers</a></li>
+                            <li><a href="/home/post"><FontAwesome name='pencil-square-o'/>Ask A Question</a></li>
                             {/* <li><a role="button">{this.props.user.name}</a></li> */}
                         </ul>
                     </div>

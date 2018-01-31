@@ -7,6 +7,9 @@ import { List } from 'immutable'
 
 import { TagBox } from 'react-tag-box'
 
+var USER = JSON.parse(localStorage.getItem('user'))
+
+
 const sampleTags = List(
     [].map(t => ({
         value: t
@@ -79,7 +82,7 @@ class PostQuestion extends Component {
             url: 'http://10.177.7.117:8080/questionAnswer/addQuestion',
             data: {
                 "title": title,
-                "userId": "jayantrana69@gmail.com",
+                "userId": USER.userId,
                 "content": content,
                 "active": true,
                 "category": this.state.dropdownVal,

@@ -21,6 +21,7 @@ class Profile extends Component {
     }
 
     componentWillMount() {
+    
         this.getProfile("jayantrana69@gmail.com")
         this.getCategories("jayantrana69@gmail.com")
     }
