@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import axios from 'axios'
 
 const BASE_URL = 'http://'
@@ -20,14 +20,56 @@ class IndiFeed extends Component {
             timestamp: '',
             title: '',
             userId: '',
-            userName: ''
+            userName: '',
+
+
+            //For answers
+            answer: 'this is an answer',
+            file: '',
+
         },
         answers: [
-            {
-
-            }
+            {}
         ]
     }
+
+    postA() {
+        let content = this.refs.answer.value;
+        const data = new FormData();
+        data.append('questionId', '0094d12cf6a34ff78528caaba3217918');
+        data.append('userId', 'jayantrana69@gmail.com');
+        data.append('answer', content);
+
+
+        if (this.state.file) {
+            data.append('file', this.state.file);
+            axios.post('http://10.177.7.117:8080/questionAnswer/addAnswer', data)
+                .then(function (response) {
+                    console.log(response.data)
+                }.bind(this))
+                .catch(function (error) {
+                    console.log(error);
+                    alert('Could not add Answer')
+                });
+        }
+        else {
+            axios.post('http://10.177.7.117:8080/questionAnswer/addAnswerWithoutImage', data)
+                .then(function (response) {
+                    console.log(response.data)
+                }.bind(this))
+                .catch(function (error) {
+                    console.log(error);
+                    alert('Could not add Answer')
+                });
+        }
+    }
+
+    handleFile(e) {
+        this.setState({file: e.target.files[0]})
+        console.log(e.target.files[0]);
+
+    }
+
 
     componentDidMount() {
         console.log('Indifeed')
@@ -38,7 +80,7 @@ class IndiFeed extends Component {
             url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
         })
             .then(function (response) {
-                //console.log(response)
+                console.log(response)
                 let data = response.data
                 this.setState({
                     question: data
@@ -64,7 +106,7 @@ class IndiFeed extends Component {
     }
 
     render() {
-        const { question, answers } = this.state
+        const {question, answers} = this.state
 
         return (
             <div className='container IndiFeed'>
@@ -75,7 +117,7 @@ class IndiFeed extends Component {
                     <div className="panel-body">
                         <div className='row'>
                             <div className='col-lg-12'>
-                                <img className='img-responsive FeedImage' src={question.imageUrl} />
+                                <img className='img-responsive FeedImage' src={question.imageUrl}/>
                             </div>
                             <div className='col-lg-3 pull-right'>By: {question.userName}</div>
                             <div className='col-lg-3'>Category: {question.category}</div>
@@ -98,14 +140,23 @@ class IndiFeed extends Component {
                                     <div className='col-lg-12'>
                                         <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
                                         <p>{row.answer}</p>
-                                        <hr />
+                                        <hr/>
                                     </div>
                                 ))}
-                                <textarea className="form-control AnswerQues" rows="4" max-lines="10" placeholder="Add Answer"></textarea>
                             </div>
                         </div> :
                         ''
                     }
+                    <textarea ref="answer" className="form-control AnswerQues" rows="4" placeholder="Add Answer"/>
+
+
+                    <button style={{margin: '40px'}} type="button" className="btn btn-default"
+                            onClick={(e) => this.postA()}>
+                        Answer
+                    </button>
+
+                    <input type="file" onChange={(e) => this.handleFile(e)}/>
+
 
                 </div>
             </div>

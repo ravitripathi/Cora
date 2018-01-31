@@ -32,7 +32,8 @@ class Main extends Component {
             questionId: '',
             tags: [],
             title: '',
-            userName: ''
+            userName: '',
+            userId: ''
         }],
         category: [{}],
         feedEntered: false,
@@ -165,7 +166,8 @@ class Main extends Component {
                                 questionId: data[i].questionId,
                                 tags: data[i].tags,
                                 title: data[i].title,
-                                userName: data[i].userName
+                                userName: data[i].userName,
+                                userId: data[i].userId
                             })
                         }
 
@@ -379,7 +381,7 @@ class Main extends Component {
                                         {searched.map((row, index) => (
                                             <div className='col-lg-12' eventKey={index} key={index}>
                                                 <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userId}{row.userName}</a></span></Link>
+                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
 
                                                 <h6>Category: {row.category}</h6>
                                                 <div>
@@ -412,7 +414,7 @@ class Main extends Component {
                                         {sport.map((row, index) => (
                                             <div className='col-lg-12'>
                                                 <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
                                                 <h6>Category: {row.category}</h6>
                                                 <p>{row.content}</p>
                                                 <p>Tags :
@@ -426,7 +428,7 @@ class Main extends Component {
                                         {news.map((row, index) => (
                                             <div className='col-lg-12'>
                                                 <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
                                                 <h6>Category: {row.category}</h6>
                                                 <p>{row.content}</p>
                                                 <p>Tags :
@@ -440,7 +442,7 @@ class Main extends Component {
                                         {technology.map((row, index) => (
                                             <div className='col-lg-12'>
                                                 <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
                                                 <h6>Category: {row.category}</h6>
                                                 <p>{row.content}</p>
                                                 <p>Tags :
@@ -454,7 +456,7 @@ class Main extends Component {
                                         {general.map((row, index) => (
                                             <div className='col-lg-12'>
                                                 <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
                                                 <h6>Category: {row.category}</h6>
                                                 <p>{row.content}</p>
                                                 <p>Tags :
@@ -468,7 +470,7 @@ class Main extends Component {
                                         {food.map((row, index) => (
                                             <div className='col-lg-12'>
                                                 <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
                                                 <h6>Category: {row.category}</h6>
                                                 <p>{row.content}</p>
                                                 <p>Tags :

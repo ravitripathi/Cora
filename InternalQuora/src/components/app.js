@@ -45,7 +45,7 @@ class App extends Component {
                 <div>
                     <Route exact path='/' component={Home} />
                     <Route exact path='/home' component={Main}/>
-                    <Route path='/home/profile' component={Profile} />
+                    <Route path='/home/profile/:userId' component={Profile} />
                     <Route path='/home/post' component={PostQuestion} />
                     <Route path='/home/admin' component={Admin}/>
                     <Route path='/home/comment' component={Comment}/>

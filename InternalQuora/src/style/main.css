@@ -130,5 +130,6 @@
 
 .AnswerQues {
     overflow-y: hidden;
-    height: 96px;
+    width: 95%;
+    margin: 20px;
 }
