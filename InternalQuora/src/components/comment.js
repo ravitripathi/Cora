@@ -3,6 +3,26 @@ import axios from 'axios'
 
 
 class Comment extends Component {
+    postComment() {
+        let content = this.refs.commentTextArea.value;
+        axios({
+            method: 'post',
+            url: 'http://10.177.7.117:8080/questionAnswer/addComment',
+            data: {
+                "comment" : content,
+                "userId" : "jayantrana69@gmail.com",
+                "answerId" : "7f348b3fdc5243d58bfab7d22ea5b8da"
+            }
+        }).then(function (response) {
+            console.log(response.data)
+        }.bind(this))
+            .catch(function (error) {
+                console.log(error);
+                alert('Could not add Comment')
+            });
+    }
+
+
 
     render() {
         return (
@@ -13,6 +33,7 @@ class Comment extends Component {
                             <div className="row">
                                 <div className="col-md-3">
                                     <profile-pic size="lg"
+                                    
                                         image-url="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXgxKQ2hBgl1BFKaZlHzfhdG86GUKZ0jIajau7PgSh12MZM9hO'"
                                         className="ng-scope ng-isolate-scope admin_pic">
                                         <span className="profile-pic ng-binding circle-lg" ng-bind="letters" ng-class="size_class"
@@ -23,24 +44,27 @@ class Comment extends Component {
                                 <div className="col-md-9">
                                     <p className="heading-4">User Name's Answer</p>
                                     <p className="heading-6 font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                    <p className="heading-6 font-light date_text" style={{textAlign:"right"}}>22/01/2018</p>
+                                    <p className="heading-6 font-light date_text" style={{ textAlign: "right" }}>22/01/2018</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="row" style={{ marginTop: '30px' }}>
                             <div className="col-md-12">
-                                <form className="form" action="index.html" method="post">
                                     <div className="form-group has-feedback input-container-md">
-                                        <textarea auto-grow="" className="form-control ng-pristine ng-valid ng-empty ng-touched" rows="4" max-lines="10" placeholder="Enter your comment here" ng-model="testarea2" name="message"
-                                            style={{ overflowY: 'hidden', height: '96px' }}></textarea>
+                                        <textarea auto-grow="" 
+                                        className="form-control ng-pristine ng-valid ng-empty ng-touched" 
+                                        rows="4" max-lines="10" 
+                                        ref="commentTextArea"
+                                        placeholder="Enter your comment here" ng-model="testarea2"
+                                            style={{ overflowY: 'hidden', height: '96px' }}>
+                                        </textarea>
                                     </div>
-                                    <div className="form-group" style={{textAlign:'right'}}>
-                                        <input type="submit" name="" value="Add Comment" className="btn btn-sm btn-primary">
+                                    <div className="form-group" style={{ textAlign: 'right' }}>
+                                        <input type="submit" name="" value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
                                         </input>
                                     </div>
-                                </form>
-
+                              
                                 <p className="heading-4">Comments (4)</p>
                                 <div className="list-view-card comment_card">
                                     <div className="card-image">
@@ -108,8 +132,8 @@ class Comment extends Component {
 
                     </div>
                 </div>
-                </div>
-                )
+            </div>
+        )
     }
 }
 
