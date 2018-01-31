@@ -384,7 +384,7 @@ class Main extends Component {
                                                 <h6>Category: {row.category}</h6>
                                                 <div>
                                                     <p>Tags :
-                                                        {row.tags.map((item) => (
+                                                        {row.tags && row.tags.map((item) => (
                                                             <span className='custom-label' key={item}>{item}</span>
                                                         ))}
                                                     </p>

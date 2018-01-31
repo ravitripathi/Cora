@@ -44,18 +44,13 @@ class App extends Component {
             <Router history={browserHistory}>
                 <div>
                     <Route exact path='/' component={Home} />
-                    <Route path='/home' component={Main}/>
-                    <Route path='/home/feed' component={IndiFeed}/>
+                    <Route exact path='/home' component={Main}/>
                     <Route path='/home/profile' component={Profile} />
                     <Route path='/home/post' component={PostQuestion} />
                     <Route path='/home/admin' component={Admin}/>
                     <Route path='/home/comment' component={Comment}/>
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                        <Route exact path='/home' component={Main}/>
-                        <Route exact path='/home/feed/:component' component={IndiFeed}/>
-                        <Route exact path='/home/notification' component={Notification}/>
-                    </Switch>
+                    <Route exact path='/home/feed/:component' component={IndiFeed}/>
+                    <Route exact path='/home/notification' component={Notification}/>
                 </div>
             </Router>
 

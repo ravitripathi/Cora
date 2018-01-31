@@ -90,19 +90,23 @@ class IndiFeed extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="panel-footer">
-                        <div className='row'>
-                            <h4>Answers: </h4>
-                            {answers.map((row, index) => (
-                                <div className='col-lg-12'>
-                                    <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
-                                    <p>{row.answer}</p>
-                                    <hr />
-                                </div>
-                            ))}
-                            <textarea className="form-control AnswerQues" rows="4" max-lines="10" placeholder="Add Answer"></textarea>
-                        </div>
-                    </div>
+                    {answers ?
+                        <div className="panel-footer">
+                            <div className='row'>
+                                <h4>Answers: </h4>
+                                {answers.map((row, index) => (
+                                    <div className='col-lg-12'>
+                                        <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
+                                        <p>{row.answer}</p>
+                                        <hr />
+                                    </div>
+                                ))}
+                                <textarea className="form-control AnswerQues" rows="4" max-lines="10" placeholder="Add Answer"></textarea>
+                            </div>
+                        </div> :
+                        ''
+                    }
+
                 </div>
             </div>
         )
