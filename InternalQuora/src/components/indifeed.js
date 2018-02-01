@@ -165,11 +165,16 @@ class IndiFeed extends Component {
                             })
                         }
 
-                        if (this.state.question.active == true) {
-                            this.refs.active.checked = true
-                        } else {
-                            this.refs.active.checked = false
+                        console.log(this.refs.active)
+
+                        if (this.refs.active) {
+                            if (this.state.question.active == true) {
+                                this.refs.active.checked = true
+                            } else {
+                                this.refs.active.checked = false
+                            }
                         }
+
 
                         console.log(this.state.quesImage)
                         axios({
@@ -220,10 +225,12 @@ class IndiFeed extends Component {
                     })
                 }
 
-                if (this.state.question.active == true) {
-                    this.refs.active.checked = true
-                } else {
-                    this.refs.active.checked = false
+                if (this.refs.active) {
+                    if (this.state.question.active == true) {
+                        this.refs.active.checked = true
+                    } else {
+                        this.refs.active.checked = false
+                    }
                 }
 
                 console.log(this.state.quesImage)
