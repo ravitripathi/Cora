@@ -48,7 +48,7 @@ class App extends Component {
                     <Route path='/home/profile/:userId' component={Profile} />
                     <Route path='/home/post' component={PostQuestion} />
                     <Route path='/home/admin' component={Admin}/>
-                    <Route path='/home/comment/:answer/:answerId/:userId/:userName' component={Comment}/>
+                    <Route path='/home/comment/:answer/:answerId/:userId/:userName/:active' component={Comment}/>
                     <Route exact path='/home/feed/:component' component={IndiFeed}/>
                     <Route exact path='/home/notification' component={Notification}/>
                 </div>

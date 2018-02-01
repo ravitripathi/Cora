@@ -25,7 +25,7 @@ var config = {
                 loaders: ['style-loader', 'css-loader']
             },
             {
-                test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+                test: /\.(png|woff|woff2|eot|ttf|svg|jpg)$/,
                 loader: 'url-loader?limit=100000'
             },
             {
@@ -36,6 +36,8 @@ var config = {
     },
     devServer: {
         historyApiFallback: true,
+        host: 'localhost',
+        port: 8080
     },
     resolve: {
         extensions: ['.webpack.js', '.web.js', '.js']

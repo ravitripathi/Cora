@@ -30,7 +30,7 @@ class Header extends Component {
                         </div>
                         <ul className="nav navbar-nav navbar-right">
                             <li><input type="text" className="NavSearch form-control input" placeholder="Search" onChange={this.props.addSearch} /></li>
-                            <li><a href="#"><FontAwesome name='bell'/></a></li>
+                            <li><a href="/home/notification"><FontAwesome name='bell'/></a></li>
                             <li><a href="/home/post"><FontAwesome name='pencil-square-o'/>Ask A Question</a></li>
                             {USER ?
                                 <li><a role="button">{USER.name}</a></li> :

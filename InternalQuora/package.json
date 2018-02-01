@@ -31,6 +31,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "immutable": "^3.8.2",
     "json-loader": "^0.5.7",
+    "lodash": "^4.17.4",
     "react-fontawesome": "^1.6.1",
     "react-skylight": "^0.5.0",
     "react-tag-box": "^1.6.0",

@@ -132,12 +132,21 @@ class Comment extends Component {
                                         </textarea>
                                 </div>
                                 <div className="form-group" style={{ textAlign: 'right' }}>
-                                    <input type="submit" name="" value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
-                                    </input>
+                                    {!this.props.match.params.active ?
+                                        <input type="submit" name="" value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
+                                        </input>
+                                        :
+                                        <input type="submit" name="" disabled value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
+                                        </input>
+                                    }
+
                                 </div>
 
-                                <p className="heading-4">Comments ({comment.length})</p>
-                                {comment.map((row, index) => (
+                                {comment &&
+                                    <p className="heading-4">Comments ({comment.length})</p>
+                                }
+
+                                {comment && comment.map((row, index) => (
                                     <div className="list-view-card comment_card">
                                         <div className="card-image">
                                             <profile-pic size="md" image-url="https://static1.squarespace.com/static/563186f5e4b0d916cf7ec6ce/t/563ad7a8e4b09a4c529b97e5/1446696874049/"></profile-pic>

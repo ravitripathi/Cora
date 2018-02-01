@@ -81,14 +81,24 @@
     font-size: 12px;
 }
 
-.IndiFeed {
+.IndiFeed .Notification {
     margin-top: 55px;
     top: 70px;
     width: 90%;
     margin-left: 50px;
 }
 
+.Notification {
+    margin-top: 65px;
+    width: 90%;
+    margin-left: 50px;
+}
+
 .IndiFeed .panel-heading {
+    padding: 10px;
+}
+
+.Notification .panel-heading {
     padding: 10px;
 }
 
@@ -132,4 +142,14 @@
     overflow-y: hidden;
     width: 95%;
     margin: 20px;
+}
+
+.toggle-container {
+    margin-top: -20px;
+}
+
+.ActiveSpan {
+    color: #2668A7;
+    font-size: 15px;
+    font-weight: lighter;
 }
