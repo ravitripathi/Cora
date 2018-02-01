@@ -19,6 +19,7 @@
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "react-sidenav": "^2.1.2",
     "style-loader": "^0.19.1",
     "throttle-debounce": "^1.0.1"
   },

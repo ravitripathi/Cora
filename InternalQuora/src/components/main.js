@@ -3,6 +3,7 @@ import { Route, Link } from 'react-router-dom'
 import axios from 'axios'
 import { debounce } from 'throttle-debounce';
 
+import SideNav, { Nav, NavIcon, NavText } from 'react-sidenav';
 
 import Header from './header'
 
@@ -110,35 +111,16 @@ class Main extends Component {
                 title: '',
                 userId: ''
             }
+        ],
+
+        categoryDetails: [
+            {
+                categoryId: '',
+                categoryName: '',
+                imageUrl: '',
+            }
         ]
     }
-
-    // callSearch(event) {
-    //     axios({
-    //         method: 'get',
-    //         url: BASE_URL + SEARCH_IP + ':' + SEARCH_PORT + SEARCH_END + event.target.value
-    //     })
-    //         .then(function (response) {
-    //             let data = response.data
-    //             let tempsearch = this.state.searched.slice()
-    //             tempsearch.splice(0,100)
-    //             for (var i=0; i<data.length; i++) {
-    //                 tempsearch.push({
-    //                     category: data[i].category,
-    //                     questionId: data[i].questionId,
-    //                     tags: data[i].tags,
-    //                     title: data[i].title,
-    //                     userName: data[i].userName
-    //                 })
-    //             }
-    //             this.setState({searched: tempsearch})
-    //             console.log(this.state.searched)
-    //         }.bind(this))
-    //         .catch(function (error) {
-    //             console.log(error)
-    //         })
-    // }
-
     addSearch = (event) => {
 
         // setTimeout(this.callSearch(event), 10000)
@@ -146,11 +128,11 @@ class Main extends Component {
         debounce(1000, () => {
             console.log('value :: ', event.target.value);
             if (event.target.value == '') {
-                this.setState({isSearchOn: false})
-                this.setState({showFeed: true})
+                this.setState({ isSearchOn: false })
+                this.setState({ showFeed: true })
             } else {
-                this.setState({isSearchOn: true})
-                this.setState({showFeed: false})
+                this.setState({ isSearchOn: true })
+                this.setState({ showFeed: false })
                 axios({
                     method: 'get',
                     url: BASE_URL + SEARCH_IP + ':' + SEARCH_PORT + SEARCH_END + event.target.value
@@ -159,8 +141,8 @@ class Main extends Component {
                         let data = response.data
                         console.log(data)
                         let tempsearch = this.state.searched.slice()
-                        tempsearch.splice(0,100)
-                        for (var i=0; i<data.length; i++) {
+                        tempsearch.splice(0, 100)
+                        for (var i = 0; i < data.length; i++) {
                             tempsearch.push({
                                 category: data[i].category,
                                 questionId: data[i].questionId,
@@ -171,7 +153,7 @@ class Main extends Component {
                             })
                         }
 
-                        this.setState({searched: tempsearch})
+                        this.setState({ searched: tempsearch })
 
                         console.log('Searched')
                         console.log(this.state.searched)
@@ -214,7 +196,7 @@ class Main extends Component {
                     // console.log(this.state.user)
 
                     console.log(userId)
-                    if(userId != null) {
+                    if (userId != null) {
                         let tempuser = {
                             name: name,
                             userId: userId,
@@ -250,70 +232,28 @@ class Main extends Component {
                             .then(function (response) {
                                 console.log(response)
                                 let data = response.data
-                                this.setState({feedEntered: true})
-                                this.setState({showFeed: true})
-                                this.setState({category: data})
-                                this.setState({sport: this.state.category.Sport})
-                                this.setState({news: this.state.category.News})
-                                this.setState({general: this.state.category.General})
-                                this.setState({technology: this.state.category.Technology})
-                                this.setState({food: this.state.category.Food})
+                                this.setState({ feedEntered: true })
+                                this.setState({ showFeed: true })
+                                this.setState({ category: data })
+                                this.setState({ sport: this.state.category.Sport })
+                                this.setState({ news: this.state.category.News })
+                                this.setState({ general: this.state.category.General })
+                                this.setState({ technology: this.state.category.Technology })
+                                this.setState({ food: this.state.category.Food })
                                 console.log(this.state.sport)
-                                // console.log(this.state.category.Sport)
-                                // console.log(data)
-                                // for (var i=0; i<data.length; i++) {
-                                //     tempfeed.push({
-                                //         category: data[i].category,
-                                //         questionId: data[i].questionId,
-                                //         tags: data[i].tags,
-                                //         title: data[i].title
-                                //     })
-                                // }
-                                // this.setState({searched: tempfeed})
+
                             }.bind(this))
                             .catch(function (error) {
                                 console.log(error)
                             })
                     }
 
-                    // console.log(token)
-                    // axios({
-                    //     method: 'get',
-                    //     url: 'https://slack.com/api/users.profile.get?token=' + token,
-                    //     headers: {
-                    //         'Content-Type': 'application/x-www-form-urlencoded'
-                    //     }
-                    // })
-                    //     .then(function (resp) {
-                    //         // const userDetail = {
-                    //         //     name: name,
-                    //         //     imageUrl: imageUrl,
-                    //         //     userId: userId,
-                    //         //     id: id
-                    //         // }
-                    //         console.log(resp)
-                    //
-                    //         //console.log(resp.data.profile.email)
-                    //         // res.json(userDetail);
-                    //         res.redirect('http://localhost:8080/home')
-                    //     })
-                    //     .catch(function (error) {
-                    //         // console.log(error)
-                    //     })
+
                 }.bind(this))
                 .catch(function (err) {
                     console.log(err)
                 })
-            // axios({
-            //     method: 'get',
-            //     url: 'http://localhost:3000/slack'
-            // })
-            //     .then(function (response) {
-            //         console.log(response)
-            //     }.bind(this))
-            //     .catch(function (error) {
-            //         console.log(error)
-            //     })
+
         } else {
 
             axios({
@@ -323,176 +263,199 @@ class Main extends Component {
                 .then(function (response) {
                     console.log(response)
                     let data = response.data
-                    this.setState({feedEntered: true})
-                    this.setState({showFeed: true})
-                    this.setState({category: data})
-                    this.setState({sport: this.state.category.Sport})
-                    this.setState({news: this.state.category.News})
-                    this.setState({general: this.state.category.General})
-                    this.setState({technology: this.state.category.Technology})
-                    this.setState({food: this.state.category.Food})
+                    this.setState({ feedEntered: true })
+                    this.setState({ showFeed: true })
+                    this.setState({ category: data })
+                    this.setState({ sport: this.state.category.Sport })
+                    this.setState({ news: this.state.category.News })
+                    this.setState({ general: this.state.category.General })
+                    this.setState({ technology: this.state.category.Technology })
+                    this.setState({ food: this.state.category.Food })
                     console.log(this.state.sport)
-                    // console.log(this.state.category.Sport)
-                    // console.log(data)
-                    // for (var i=0; i<data.length; i++) {
-                    //     tempfeed.push({
-                    //         category: data[i].category,
-                    //         questionId: data[i].questionId,
-                    //         tags: data[i].tags,
-                    //         title: data[i].title
-                    //     })
-                    // }
-                    // this.setState({searched: tempfeed})
+
                 }.bind(this))
                 .catch(function (error) {
                     console.log(error)
                 })
         }
+
+        axios({
+            method: 'get',
+            url: 'http://10.177.7.124:8080/getAll'
+        })
+            .then(function (response) {
+             this.setState({categoryDetails:response.data})
+             console.log(response.data)
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error)
+            })
     }
 
     componentDidMount() {
-
-        if(this.state.searched[0].questionId == ''){
+        if (this.state.searched[0].questionId == '') {
             this.state.searched.splice(0, 1);
         }
-
         console.log('Main' + this.state.isSearchOn)
-
-
-
-
     }
 
     render() {
-        const { showFeed, isSearchOn, searched, sport, news, food, general, technology } = this.state
+        const { showFeed, isSearchOn, searched, sport, news, food, general, technology, categoryDetails } = this.state
 
         return (
             <div className='container Main'>
-                <Header user={USER} addSearch={this.addSearch.bind(this)} />
-                {isSearchOn ?
-                    <div className='container Search'>
-                        <div className="panel panel-warning">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">Search</h3>
-                            </div>
-                            <div className="panel-body">
-                                {searched.length>0 &&(
-                                    <div>
-                                        {searched.map((row, index) => (
-                                            <div className='col-lg-12' eventKey={index} key={index}>
-                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
-
-                                                <h6>Category: {row.category}</h6>
-                                                <div>
-                                                    <p>Tags :
-                                                        {row.tags && row.tags.map((item) => (
-                                                            <span className='custom-label' key={item}>{item}</span>
-                                                        ))}
-                                                    </p>
-                                                </div>
-                                                <hr />
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                <row>
+                    <div className='col-lg-2' >
+                        <div style={{ border:'2px', borderColor:'#4D4341' ,background: '', color: '#000000', width: 200, marginTop: '80px', marginLeft:'-50px' }}>
+                            <SideNav>
+                                <h3><center>Top Categories</center></h3>
+                                {categoryDetails.map((row,index)=>(
+                                      <Nav id='dashboard'>
+                                        <NavIcon><img src={row.imageUrl} style={{width:'15px',height:'15px'}}/></NavIcon>
+                                        <NavText onClick="">{row.categoryName}</NavText>
+                                        <hr/>
+                                      </Nav>  
+                                ))}
+                            </SideNav>
                         </div>
-                    </div> :
-                    ''
-                }
+                    </div>
 
-                {showFeed ?
-                    <div className='container Feed'>
-                        <div className="panel panel-warning">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">Top Feed</h3>
-                            </div>
-                            {this.state.feedEntered ?
-                                <div className="panel-body">
-                                    <div className='row'>
-                                        {sport.map((row, index) => (
-                                            <div className='col-lg-12'>
-                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
-                                                <h6>Category: {row.category}</h6>
-                                                <p>{row.content}</p>
-                                                <p>Tags :
-                                                    {row.tags.map((item) => (
-                                                        <span className='custom-label' key={item}>{item}</span>
-                                                    ))}
-                                                </p>
-                                                <hr />
+                    <div className='col-lg-10'>
+                        <Header user={USER} addSearch={this.addSearch.bind(this)} />
+                        {isSearchOn ?
+                            <div className='container Search'>
+                                <div className="panel panel-warning">
+                                    <div className="panel-heading">
+                                        <h3 className="panel-title">Search</h3>
+                                    </div>
+                                    <div className="panel-body">
+                                        {searched.length > 0 && (
+                                            <div>
+                                                {searched.map((row, index) => (
+                                                    <div className='col-lg-12' eventKey={index} key={index}>
+                                                        <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                        <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+
+                                                        <h6>Category: {row.category}</h6>
+                                                        <div>
+                                                            <p>Tags :
+                                                        {row.tags && row.tags.map((item) => (
+                                                                    <span className='custom-label' key={item}>{item}</span>
+                                                                ))}
+                                                            </p>
+                                                        </div>
+                                                        <hr />
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                        {news.map((row, index) => (
-                                            <div className='col-lg-12'>
-                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
-                                                <h6>Category: {row.category}</h6>
-                                                <p>{row.content}</p>
-                                                <p>Tags :
+                                        )}
+                                    </div>
+                                </div>
+                            </div> :
+                            ''
+                        }
+
+                        {showFeed ?
+                            <div className='container Feed'>
+                                <div className="panel panel-warning">
+                                    <div className="panel-heading">
+                                        <h3 className="panel-title">Top Feed</h3>
+                                    </div>
+                                    {this.state.feedEntered ?
+                                        <div className="panel-body">
+                                            <div className='row'>
+                                                {sport.map((row, index) => (
+                                                    <div className='col-lg-12'>
+                                                        <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                        <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+                                                        <h6>Category: {row.category}</h6>
+                                                        <p>{row.content}</p>
+                                                        <p>Tags :
                                                     {row.tags.map((item) => (
-                                                        <span className='custom-label' key={item}>{item}</span>
-                                                    ))}
-                                                </p>
-                                                <hr />
-                                            </div>
-                                        ))}
-                                        {technology.map((row, index) => (
-                                            <div className='col-lg-12'>
-                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
-                                                <h6>Category: {row.category}</h6>
-                                                <p>{row.content}</p>
-                                                <p>Tags :
+                                                                <span className='custom-label' key={item}>{item}</span>
+                                                            ))}
+                                                        </p>
+                                                        <hr />
+                                                    </div>
+                                                ))}
+                                                {news.map((row, index) => (
+                                                    <div className='col-lg-12'>
+                                                        <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                        <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+                                                        <h6>Category: {row.category}</h6>
+                                                        <p>{row.content}</p>
+                                                        <p>Tags :
                                                     {row.tags.map((item) => (
-                                                        <span className='custom-label' key={item}>{item}</span>
-                                                    ))}
-                                                </p>
-                                                <hr />
-                                            </div>
-                                        ))}
-                                        {general.map((row, index) => (
-                                            <div className='col-lg-12'>
-                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
-                                                <h6>Category: {row.category}</h6>
-                                                <p>{row.content}</p>
-                                                <p>Tags :
+                                                                <span className='custom-label' key={item}>{item}</span>
+                                                            ))}
+                                                        </p>
+                                                        <hr />
+                                                    </div>
+                                                ))}
+                                                {technology.map((row, index) => (
+                                                    <div className='col-lg-12'>
+                                                        <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                        <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+                                                        <h6>Category: {row.category}</h6>
+                                                        <p>{row.content}</p>
+                                                        <p>Tags :
                                                     {row.tags.map((item) => (
-                                                        <span className='custom-label' key={item}>{item}</span>
-                                                    ))}
-                                                </p>
-                                                <hr />
-                                            </div>
-                                        ))}
-                                        {food.map((row, index) => (
-                                            <div className='col-lg-12'>
-                                                <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                                <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
-                                                <h6>Category: {row.category}</h6>
-                                                <p>{row.content}</p>
-                                                <p>Tags :
+                                                                <span className='custom-label' key={item}>{item}</span>
+                                                            ))}
+                                                        </p>
+                                                        <hr />
+                                                    </div>
+                                                ))}
+                                                {general.map((row, index) => (
+                                                    <div className='col-lg-12'>
+                                                        <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                        <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+                                                        <h6>Category: {row.category}</h6>
+                                                        <p>{row.content}</p>
+                                                        <p>Tags :
                                                     {row.tags.map((item) => (
-                                                        <span className='custom-label' key={item}>{item}</span>
-                                                    ))}
-                                                </p>
-                                                <hr />
-                                            </div>
-                                        ))}
-                                        {/*<div className='col-lg-4'>*/}
-                                        {/*<img className='img-responsive' src='../img/2013-lebron-11-away-commercial-04.jpg' />*/}
-                                        {/*</div>*/}
-                                    </div> :
+                                                                <span className='custom-label' key={item}>{item}</span>
+                                                            ))}
+                                                        </p>
+                                                        <hr />
+                                                    </div>
+                                                ))}
+                                                {food.map((row, index) => (
+                                                    <div className='col-lg-12'>
+                                                        <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                        <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+                                                        <h6>Category: {row.category}</h6>
+                                                        <p>{row.content}</p>
+                                                        <p>Tags :
+                                                    {row.tags.map((item) => (
+                                                                <span className='custom-label' key={item}>{item}</span>
+                                                            ))}
+                                                        </p>
+                                                        <hr />
+                                                    </div>
+                                                ))}
+                                                {/*<div className='col-lg-4'>*/}
+                                                {/*<img className='img-responsive' src='../img/2013-lebron-11-away-commercial-04.jpg' />*/}
+                                                {/*</div>*/}
+                                            </div> :
 
                                 </div> :
-                                ''
-                            }
-                        </div>
-                    </div> :
-                    ''
-                }
+                                        ''
+                                    }
+                                </div>
+                            </div> :
+                            ''
+                        }
+
+                    </div>
+
+
+                </row>
+
+
+
+
+
             </div>
         )
     }
