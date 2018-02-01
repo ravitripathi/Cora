@@ -111,9 +111,9 @@
 }
 
 .Search {
-    margin-top: 65px;
+    position: absolute;
+    top: 70px;
     width: 90%;
-    margin-left: 50px;
 }
 
 .Search .panel-heading {
