@@ -184,25 +184,25 @@ class Main extends Component {
                 console.log(response)
                 let data = response.data
                 // this.setState({category:data.category})
-                
+
                 console.log(this.state.category)
-                this.setState({heading: catName})
+                this.setState({ heading: catName })
                 if (this.state.heading == 'Sport') {
-                    this.setState({indiCategory: this.state.category.Sport})
+                    this.setState({ indiCategory: this.state.category.Sport })
                 } else if (this.state.heading == 'News') {
-                    this.setState({indiCategory: this.state.category.News})
+                    this.setState({ indiCategory: this.state.category.News })
                 } else if (this.state.heading == 'General') {
-                    this.setState({indiCategory: this.state.category.General})
+                    this.setState({ indiCategory: this.state.category.General })
                 } else if (this.state.heading == 'Food') {
-                    this.setState({indiCategory: this.state.category.Food})
+                    this.setState({ indiCategory: this.state.category.Food })
                 } else if (this.state.heading == 'Technology') {
-                    this.setState({indiCategory: this.state.category.Technology})
-                } 
+                    this.setState({ indiCategory: this.state.category.Technology })
+                }
                 let tempcat = this.state.category
                 console.log('tempcat')
                 console.log(tempcat)
-                this.setState({indiCategory: this.state.category})
                 this.setState({ feedEntered: false })
+                this.setState({ isSearchOn: false })
                 // this.setState({ feedEntered: false })
                 // this.setState({ showFeed: true })
                 // this.setState({ category: data })
@@ -409,7 +409,31 @@ class Main extends Component {
                                     </div>
                                 </div>
                             </div> :
-                            ''
+                            <div className='container Feed'>
+                                <div className="panel panel-warning">
+                                    <div className="panel-heading">
+                                        <h3 className="panel-title">{heading}</h3>
+                                    </div>
+                                    <div className="panel-body">
+                                        <div className='row'>
+                                            {indiCategory && indiCategory.map((row, index) => (
+                                                <div className='col-lg-12'>
+                                                    <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
+                                                    <Link to={`/home/profile/${row.userId}`}><span className='pull-right AuthorName'>By: <a>{row.userName}</a></span></Link>
+                                                    <h6>Category: {row.category}</h6>
+                                                    <p>{row.content}</p>
+                                                    <p>Tags :
+                                {row.tags && row.tags.map((item) => (
+                                                            <span className='custom-label' key={item}>{item}</span>
+                                                        ))}
+                                                    </p>
+                                                    <hr />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         }
 
                         {showFeed ?
@@ -428,7 +452,7 @@ class Main extends Component {
                                                         <h6>Category: {row.category}</h6>
                                                         <p>{row.content}</p>
                                                         <p>Tags :
-                                                    {row.tags.map((item) => (
+                                                    {row.tags && row.tags.map((item) => (
                                                                 <span className='custom-label' key={item}>{item}</span>
                                                             ))}
                                                         </p>
@@ -442,7 +466,7 @@ class Main extends Component {
                                                         <h6>Category: {row.category}</h6>
                                                         <p>{row.content}</p>
                                                         <p>Tags :
-                                                    {row.tags.map((item) => (
+                                                    {row.tags && row.tags.map((item) => (
                                                                 <span className='custom-label' key={item}>{item}</span>
                                                             ))}
                                                         </p>
@@ -470,7 +494,7 @@ class Main extends Component {
                                                         <h6>Category: {row.category}</h6>
                                                         <p>{row.content}</p>
                                                         <p>Tags :
-                                                    {row.tags.map((item) => (
+                                                    {row.tags && row.tags.map((item) => (
                                                                 <span className='custom-label' key={item}>{item}</span>
                                                             ))}
                                                         </p>
@@ -484,7 +508,7 @@ class Main extends Component {
                                                         <h6>Category: {row.category}</h6>
                                                         <p>{row.content}</p>
                                                         <p>Tags :
-                                                    {row.tags.map((item) => (
+                                                    {row.tags && row.tags.map((item) => (
                                                                 <span className='custom-label' key={item}>{item}</span>
                                                             ))}
                                                         </p>
@@ -506,7 +530,7 @@ class Main extends Component {
                                                         <h6>Category: {row.category}</h6>
                                                         <p>{row.content}</p>
                                                         <p>Tags :
-                                                {row.tags.map((item) => (
+                                                {row.tags && row.tags.map((item) => (
                                                                 <span className='custom-label' key={item}>{item}</span>
                                                             ))}
                                                         </p>
