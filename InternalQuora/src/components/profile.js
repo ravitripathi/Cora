@@ -22,7 +22,8 @@ class Profile extends Component {
         category: '0',
         answers: '0',
         categoryList: [],
-
+        isCategoryListShown: false,
+        currentFeedDisplay: 'Questions asked by user',
         feedData: [{
             questionId: '',
             title: '',
@@ -91,6 +92,27 @@ class Profile extends Component {
             });
     }
 
+
+    getAnswersGivenByUser(user) {
+        const data = new FormData();
+        data.append('userId', user);
+        axios.post('http://10.177.7.117:8080/questionAnswer/questionAnswerByUserId', data)
+            .then(function (response) {
+                console.log(response);
+                let data = response.data
+                this.setState({ currentFeedDisplay: "Questions answered by User" })
+                this.setState({ feedData: data })
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    setCategories() {
+        this.setState({ currentFeedDisplay: "Categories User has contributed to" })
+        this.setState({ isCategoryListShown: true })
+        console.log(categoryList)
+    }
     getQuestionsAskedByUser(user) {
 
         const data = new FormData();
@@ -99,7 +121,8 @@ class Profile extends Component {
             .then(function (response) {
                 console.log(response);
                 let data = response.data
-                this.setState({ feedData: data})
+                this.setState({ currentFeedDisplay: "Questions asked by user" })
+                this.setState({ feedData: data })
             }.bind(this))
             .catch(function (error) {
                 console.log(error);
@@ -129,15 +152,17 @@ class Profile extends Component {
                     qactive: false,
                     aactive: false,
                     catactive: true,
-                    isFeedVisible: false,
+                    isFeedVisible: true,
+                    isCategoryListShown:true,
                 })
-
+            this.setCategories()
         } else if (variable == 'questions') {
             this.setState({
                 qactive: true,
                 aactive: false,
                 catactive: false,
                 isFeedVisible: true,
+                isCategoryListShown:false
             })
             this.getQuestionsAskedByUser(this.props.match.params.userId);
 
@@ -147,8 +172,12 @@ class Profile extends Component {
                 qactive: false,
                 aactive: true,
                 catactive: false,
-                isFeedVisible: false,
+                isFeedVisible: true,
+                isCategoryListShown:false
             })
+
+            this.getAnswersGivenByUser(this.props.match.params.userId);
+
         }
 
 
@@ -168,8 +197,10 @@ class Profile extends Component {
         const { questions } = this.state
         const { category } = this.state
         const { answers } = this.state
-        const {feedData} = this.state
-
+        const { feedData } = this.state
+        const { currentFeedDisplay } = this.state
+        const { categoryList } = this.state
+        const {isCategoryListShown} = this.state
         return (
             <div className='container Profile'>
                 <Header user={USER} />
@@ -221,7 +252,7 @@ class Profile extends Component {
                                 onClick={(e) => this.toggleClass("cat")}>
                                 <div className="buckets-content">
                                     <div className="bucket-heading">Categories subscribed to</div>
-
+                                    <div className="bucket-value">{categoryList.length}</div>
                                 </div>
                             </div>
                         </li>
@@ -246,18 +277,31 @@ class Profile extends Component {
                     <div className='container Feed' style={{ marginTop: '400px' }}>
                         <div className="panel panel-warning">
                             <div className="panel-heading">
-                                <h3 className="panel-title">Top Feed</h3>
+                                <h3 className="panel-title">{currentFeedDisplay}</h3>
                             </div>
                             <div className="panel-body">
                                 <div className='row'>
-                                    {feedData.map((row, index) => (
-                                        <div className='col-lg-12'>
-                                          <Link to={`/home/feed/${row.questionId}`}><a><h5>{row.title}</h5></a></Link>
-                                            <p>{row.content}</p>
-                                            <p>{row.timestamp}</p>
-                                        </div>
-                                    ))}
-                                    <hr/>
+                                    {
+                                        isCategoryListShown ?
+
+                                            categoryList.map((row, index) => (
+                                                <div className='col-lg-12'>
+                                                <p>{row}</p>
+                                                </div>
+                                            ))
+
+                                    :
+                                       feedData.map((row, index) => (
+                                            <div className='col-lg-12'>
+                                        <Link to={`/home/feed/${row.questionId}`}>
+                                            <a><h5>{row.title}</h5></a></Link>
+                                        <p>{row.content}</p>
+                                        <p>{row.timestamp}</p>
+                                        <hr />
+                                    </div>
+
+                                    ))
+                                    }
                                 </div>
                             </div>
                         </div>
