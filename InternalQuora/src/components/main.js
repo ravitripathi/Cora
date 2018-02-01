@@ -437,7 +437,7 @@ class Main extends Component {
                                                 {/*<div className='col-lg-4'>*/}
                                                 {/*<img className='img-responsive' src='../img/2013-lebron-11-away-commercial-04.jpg' />*/}
                                                 {/*</div>*/}
-                                            </div> :
+                                            </div> 
 
                                 </div> :
                                         ''
