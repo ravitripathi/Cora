@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
+
 
 const BASE_URL = 'http://'
 const INFEED_IP = '10.177.7.117'
@@ -7,6 +9,7 @@ const INFEED_PORT = 8080
 const QUES_END = '/questionAnswer/getQuestionByQuestionId/?questionId='
 const ANSW_END = '/questionAnswer/getAnswersByQuestionId/'
 
+var USER = JSON.parse(localStorage.getItem('user'))
 
 class IndiFeed extends Component {
     state = {
@@ -36,16 +39,46 @@ class IndiFeed extends Component {
     postA() {
         let content = this.refs.answer.value;
         const data = new FormData();
-        data.append('questionId', '0094d12cf6a34ff78528caaba3217918');
-        data.append('userId', 'jayantrana69@gmail.com');
+        data.append('questionId', this.props.match.params.component);
+        data.append('userId', USER.userId);
         data.append('answer', content);
 
+        let qid = this.props.match.params.component
 
         if (this.state.file) {
             data.append('file', this.state.file);
             axios.post('http://10.177.7.117:8080/questionAnswer/addAnswer', data)
                 .then(function (response) {
                     console.log(response.data)
+                    axios({
+                        method: 'post',
+                        url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
+                    })
+                        .then(function (response) {
+                            console.log(response)
+                            this.refs.answer.value = ''
+                            let data = response.data
+                            this.setState({
+                                question: data
+                            })
+                            axios({
+                                method: 'get',
+                                url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + ANSW_END + qid
+                            })
+                                .then(function (response) {
+                                    console.log(response)
+                                    let data = response.data.answerDTOList
+                                    this.setState({answers: data})
+                                    console.log('Answers')
+                                    console.log(this.state.answers)
+                                }.bind(this))
+                                .catch(function (error) {
+                                    console.log(error)
+                                })
+                        }.bind(this))
+                        .catch(function (error) {
+                            console.log(error)
+                        })
                     alert('Thanks for answering')
                 }.bind(this))
                 .catch(function (error) {
@@ -57,6 +90,35 @@ class IndiFeed extends Component {
             axios.post('http://10.177.7.117:8080/questionAnswer/addAnswerWithoutImage', data)
                 .then(function (response) {
                     console.log(response.data)
+                    this.refs.answer.value = ''
+                    axios({
+                        method: 'post',
+                        url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
+                    })
+                        .then(function (response) {
+                            console.log(response)
+                            let data = response.data
+                            this.setState({
+                                question: data
+                            })
+                            axios({
+                                method: 'get',
+                                url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + ANSW_END + qid
+                            })
+                                .then(function (response) {
+                                    console.log(response)
+                                    let data = response.data.answerDTOList
+                                    this.setState({answers: data})
+                                    console.log('Answers')
+                                    console.log(this.state.answers)
+                                }.bind(this))
+                                .catch(function (error) {
+                                    console.log(error)
+                                })
+                        }.bind(this))
+                        .catch(function (error) {
+                            console.log(error)
+                        })
                     alert('Thanks for answering')
                 }.bind(this))
                 .catch(function (error) {
@@ -75,7 +137,7 @@ class IndiFeed extends Component {
 
     componentDidMount() {
         console.log('Indifeed')
-        console.log(this.props.match.params.component)
+        console.log(this.props)
         let qid = this.props.match.params.component
         axios({
             method: 'post',
@@ -119,7 +181,11 @@ class IndiFeed extends Component {
                     <div className="panel-body">
                         <div className='row'>
                             <div className='col-lg-12'>
-                                <img className='img-responsive FeedImage' src={question.imageUrl}/>
+                                {question.imageUrl == '' ?
+                                    <img className='img-responsive FeedImage' src={question.imageUrl}/> :
+                                    <img className='img-responsive FeedImage' src='http://www.nmgncp.com/data/out/252/5835014-nike-wallpapers-for-computers.jpg' />
+                                }
+
                             </div>
                             <div className='col-lg-3 pull-right'>By: {question.userName}</div>
                             <div className='col-lg-3'>Category: {question.category}</div>
@@ -142,6 +208,9 @@ class IndiFeed extends Component {
                                     <div className='col-lg-12'>
                                         <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
                                         <p>{row.answer}</p>
+                                        <Link to={`/home/comment/${row.answer}/${row.id}/${row.userId}/${row.userName}`}>
+                                            New Comment
+                                        </Link>
                                         <hr/>
                                     </div>
                                 ))}

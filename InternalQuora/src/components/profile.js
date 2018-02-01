@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Indifeed from './indifeed';
+import Header from './header';
 import axios from 'axios';
 
 var USER = JSON.parse(localStorage.getItem('user'))
@@ -171,6 +172,7 @@ class Profile extends Component {
 
         return (
             <div className='container Profile'>
+                <Header user={USER} />
                 <div className="panel-body" style={{ textAlign: 'center' }}>
                     <img className='ng-binding'
                         src={imageURL}
@@ -189,9 +191,9 @@ class Profile extends Component {
                         this.props.match.params.userId != USER.userId ?
                             <div className="tags" value="'Following'">
                                 {this.state.followClicked ?
-                                    <input type="submit" name="" disabled onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm btn-info" />
+                                    <input type="submit" name="" disabled onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm" />
                                     :
-                                    <input type="submit" name="" onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm btn-info" />
+                                    <input type="submit" name="" onClick={(e) => this.followUser()} value="Follow" class="btn btn-sm" />
                                 }
 
                             </div> :
@@ -219,10 +221,6 @@ class Profile extends Component {
                                 onClick={(e) => this.toggleClass("cat")}>
                                 <div className="buckets-content">
                                     <div className="bucket-heading">Categories subscribed to</div>
-                                    <div className="bucket-value" tooltip-placement="bottom" uib-tooltip="On the bottom">{category}</div>
-                                    <div uib-tooltip-popup uib-title content="On the bottom" origin-scope="origScope" className="tooltip ng-scope ng-isolate-scope bottom fade in" tooltip-animation-class="fade" uib-tooltip-classes="" ng-class="{ in: isOpen }" style={{ top: '6616px', left: '583px' }}>>
-                                        <div className="tooltip-inner ng-binding" ng-bind="content">On the bottom</div>
-                                    </div>
 
                                 </div>
                             </div>

@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import FontAwesome from 'react-fontawesome'
+
+var USER = JSON.parse(localStorage.getItem('user'))
+
 class Header extends Component {
 
     componentWillMount() {
         // console.log('Check' + this.props.isSearchOn)
+
     }
 
     handleSearch() {
@@ -28,7 +32,11 @@ class Header extends Component {
                             <li><input type="text" className="NavSearch form-control input" placeholder="Search" onChange={this.props.addSearch} /></li>
                             <li><a href="#"><FontAwesome name='bell'/></a></li>
                             <li><a href="/home/post"><FontAwesome name='pencil-square-o'/>Ask A Question</a></li>
-                            <li><a role="button">{this.props.user.name}</a></li>
+                            {USER ?
+                                <li><a role="button">{USER.name}</a></li> :
+                                <li><a role="button">Joker</a></li>
+                            }
+
                         </ul>
                     </div>
                 </nav>
