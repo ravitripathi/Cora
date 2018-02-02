@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import FontAwesome from 'react-fontawesome'
+import { Route, Link } from 'react-router-dom'
 
 var USER = JSON.parse(localStorage.getItem('user'))
 
@@ -32,11 +33,12 @@ class Header extends Component {
                         </div>
                         <ul className="nav navbar-nav navbar-right">
                             <li><input type="text" className="NavSearch form-control input" placeholder="Search" onChange={this.props.addSearch} /></li>
-                            <li><a href="/home/notification"><FontAwesome name='bell'/></a></li>
-                            <li><a href="/home/post"><FontAwesome name='pencil-square-o'/>Ask A Question</a></li>
+                            <li><a href="/home/notification"><FontAwesome name='bell' /></a></li>
+                            <li><a href="/home/post"><FontAwesome name='pencil-square-o' />Ask A Question</a></li>
                             {USER ?
-                                <li><a role="button">{USER.name}</a></li> :
-                                <li><a role="button">Joker</a></li>
+                             <li><a href={`/home/profile/${USER.email}`} role="button">{USER.name}</a></li>:
+                             <li><a href='/home/profile/jayantrana69@gmail.com' role="button">Joker</a></li> 
+                                
                             }
 
                         </ul>
@@ -48,3 +50,7 @@ class Header extends Component {
 }
 
 export default Header
+
+
+// <li><a role="button">{USER.name}</a></li> :
+//                                 <li><a role="button">Joker</a></li>
