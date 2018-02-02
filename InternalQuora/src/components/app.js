@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { BrowserRouter as Router, Switch, Link, Route, browserHistory } from 'react-router-dom'
 
-import Test from '../components/test'
 import Home from './home'
 import Main from './main'
 import IndiFeed from './indifeed'
