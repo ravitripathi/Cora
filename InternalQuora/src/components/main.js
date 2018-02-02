@@ -118,6 +118,7 @@ class Main extends Component {
                 categoryId: '',
                 categoryName: '',
                 imageUrl: '',
+                numberOfQuestions: ''
             }
         ],
 
@@ -372,8 +373,8 @@ class Main extends Component {
                                     <div>
                                         {row.categoryName != 'Bot' ?
                                             <Nav id='dashboard'>
-                                                <NavIcon><img src={row.imageUrl} style={{ width: '15px', height: '15px' }} /></NavIcon>
-                                                <NavText><a onClick={(e) => this.getCatLink(`${row.categoryName}`)}>{row.categoryName}</a></NavText>
+                                                <NavIcon><img src={row.imageUrl} style={{ width: '30px', height: '30px', borderRadius: '50%' }} /></NavIcon>
+                                                <NavText><a onClick={(e) => this.getCatLink(`${row.categoryName}`)}>{row.categoryName}&nbsp;</a>({row.numberOfQuestions})</NavText>
                                                 <hr />
                                             </Nav> :
                                             ''
