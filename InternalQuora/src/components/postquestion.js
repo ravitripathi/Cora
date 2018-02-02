@@ -7,6 +7,7 @@ import { List } from 'immutable'
 import { TagBox } from 'react-tag-box'
 import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
 
+
 var USER = JSON.parse(localStorage.getItem('user'))
 
 
@@ -53,10 +54,27 @@ class PostQuestion extends Component {
     }
 
     onAlertDismissed(alert) {
-    this.setState({isShowingDangerAlert:false,
-        isShowingSuccessAlert: false})
+        this.setState({
+            isShowingDangerAlert: false,
+            isShowingSuccessAlert: false
+        })
+        this.props.history.push("/home")
     }
 
+    handleDelete(i) {
+        let tags = this.state.tags;
+        tags.splice(i, 1);
+        this.setState({ tags: tags });
+    }
+
+    handleAddition(tag) {
+        let tags = this.state.finalTAG;
+        tags.push({
+            id: tags.length + 1,
+            text: tag
+        });
+        this.setState({ finalTAG: tags });
+    }
 
     postQ() {
         let content = this.refs.descTextArea.value;
@@ -88,7 +106,7 @@ class PostQuestion extends Component {
             questionId = response.data;
 
             this.onAlertToggle("isShowingSuccessAlert")
-        
+
 
         }.bind(this))
             .catch(function (error) {
@@ -127,9 +145,9 @@ class PostQuestion extends Component {
             <div className='container Profile'>
                 <AlertContainer position="top-right">
                     {this.state.isShowingSuccessAlert ? (
-                        <Alert type="success" headline="Done!" 
-                        onDismiss={this.onAlertDismissed.bind(this)}
-                        timeout={this.state.timeout}
+                        <Alert type="success" headline="Done!"
+                            onDismiss={this.onAlertDismissed.bind(this)}
+                            timeout={this.state.timeout}
                         >
                             Your question has been posted!
 						</Alert>
@@ -137,11 +155,11 @@ class PostQuestion extends Component {
 
 
                     {this.state.isShowingDangerAlert ? (
-                        <Alert type="danger" headline="Whoops!" 
-                        onDismiss={this.onAlertDismissed.bind(this)}
-                        timeout={this.state.timeout}
+                        <Alert type="danger" headline="Whoops!"
+                            onDismiss={this.onAlertDismissed.bind(this)}
+                            timeout={this.state.timeout}
                         >
-                            Sorry, couldn't post you question 
+                            Sorry, couldn't post you question
 						</Alert>
                     ) : null}
                 </AlertContainer>
@@ -222,7 +240,7 @@ class PostQuestion extends Component {
                             </ul>
                         </div>
 
-                      
+
                         <button style={{ margin: '40px' }}
                             type="button"
                             className={this.state.buttonClass}
@@ -231,7 +249,8 @@ class PostQuestion extends Component {
                             onClick={(e) => this.postQ()}>
                             Post it!
                         </button>
-                       
+
+
                     </div>
                 </div>
             </div>
