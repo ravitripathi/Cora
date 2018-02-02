@@ -367,7 +367,7 @@ class Main extends Component {
                     <div className='col-lg-2' >
                         <div style={{ border: '2px', borderColor: '#4D4341', background: '', color: '#000000', width: 200, marginTop: '80px', marginLeft: '-50px' }}>
                             <SideNav>
-                                <h3><center>Top Categories</center></h3>
+                                <h3><center>Categories</center></h3>
                                 {categoryDetails.map((row, index) => (
                                     <div>
                                         {row.categoryName != 'Bot' ?

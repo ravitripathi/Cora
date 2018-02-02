@@ -270,7 +270,11 @@ class IndiFeed extends Component {
                                     <ul>
                                         <li class="toggle-container">
                                             <input type="checkbox" id="active" ref='active' onChange={this.activate} />
-                                            <label for="active">Active</label>
+                                            {question.active ?
+                                                <label for="active">Active</label> :
+                                                <label for="active">InActive</label>
+                                            }
+
                                             <div class="slider"></div>
                                         </li>
                                     </ul>

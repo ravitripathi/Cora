@@ -64,7 +64,7 @@ class Comment extends Component {
 
     componentWillMount() {
         let tempanswer = this.props.match.params
-        console.log(tempanswer)
+        console.log(this.props.match)
         this.setState({
             answer: tempanswer
         })
@@ -161,7 +161,7 @@ class Comment extends Component {
                                         </textarea>
                                 </div>
                                 <div className="form-group" style={{ textAlign: 'right' }}>
-                                    {!this.props.match.params.active ?
+                                    {this.props.match.params.active == "true" ?
                                         <input type="submit" name="" value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
                                         </input>
                                         :
