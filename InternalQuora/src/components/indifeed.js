@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
 
 import Header from './header'
 
@@ -26,18 +27,15 @@ class IndiFeed extends Component {
             userId: '',
             userName: '',
             moderatorId: ''
-
-
-            // //For answers
-            // answer: 'this is an answer',
-            // file: '',
-
         },
         quesImage: '',
         isActive: true,
         answers: [
             {}
-        ]
+        ],
+        isShowingSuccessAlert: false,
+        isShowingDangerAlert: false,
+        timeout: 1000,
     }
 
     postA() {
@@ -72,7 +70,7 @@ class IndiFeed extends Component {
                                 .then(function (response) {
                                     console.log(response)
                                     let data = response.data.answerDTOList
-                                    this.setState({answers: data})
+                                    this.setState({ answers: data })
                                     console.log('Answers')
                                     console.log(this.state.answers)
                                 }.bind(this))
@@ -83,11 +81,15 @@ class IndiFeed extends Component {
                         .catch(function (error) {
                             console.log(error)
                         })
-                    alert('Thanks for answering')
+              
+
+                    this.onAlertToggle("isShowingSuccessAlert")
+
                 }.bind(this))
                 .catch(function (error) {
                     console.log(error);
-                    alert('Could not add Answer')
+                   
+                    this.onAlertToggle("isShowingDangerAlert")
                 });
         }
         else {
@@ -112,7 +114,7 @@ class IndiFeed extends Component {
                                 .then(function (response) {
                                     console.log(response)
                                     let data = response.data.answerDTOList
-                                    this.setState({answers: data})
+                                    this.setState({ answers: data })
                                     console.log('Answers')
                                     console.log(this.state.answers)
                                 }.bind(this))
@@ -123,17 +125,17 @@ class IndiFeed extends Component {
                         .catch(function (error) {
                             console.log(error)
                         })
-                    alert('Thanks for answering')
+                        this.onAlertToggle("isShowingSuccessAlert")
                 }.bind(this))
                 .catch(function (error) {
                     console.log(error);
-                    alert('Could not add Answer')
+                    this.onAlertToggle("isShowingDangerAlert")
                 });
         }
     }
 
     handleFile(e) {
-        this.setState({file: e.target.files[0]})
+        this.setState({ file: e.target.files[0] })
         console.log(e.target.files[0]);
 
     }
@@ -185,7 +187,7 @@ class IndiFeed extends Component {
                             .then(function (response) {
                                 console.log(response)
                                 let data = response.data.answerDTOList
-                                this.setState({answers: data})
+                                this.setState({ answers: data })
                                 console.log('Answers')
                                 console.log(this.state.answers)
                             }.bind(this))
@@ -242,7 +244,7 @@ class IndiFeed extends Component {
                     .then(function (response) {
                         console.log(response)
                         let data = response.data.answerDTOList
-                        this.setState({answers: data})
+                        this.setState({ answers: data })
                         console.log('Answers')
                         console.log(this.state.answers)
                     }.bind(this))
@@ -255,12 +257,46 @@ class IndiFeed extends Component {
             })
     }
 
+    onAlertToggle(type) {
+        this.setState({
+            [type]: !this.state[type]
+        });
+    }
+
+    onAlertDismissed(alert) {
+        this.setState({
+            isShowingDangerAlert: false,
+            isShowingSuccessAlert: false
+        })
+      
+    }
+
     render() {
-        const {question, answers} = this.state
+        const { question, answers, timeout } = this.state
 
         return (
             <div className='container IndiFeed'>
                 <Header user={USER} />
+                <AlertContainer position="top-right">
+                    {this.state.isShowingSuccessAlert ? (
+                        <Alert type="success" headline="Done!"
+                            onDismiss={this.onAlertDismissed.bind(this)}
+                            timeout={this.state.timeout}
+                        >
+                            Your Answer has been posted!
+						</Alert>
+                    ) : null}
+
+
+                    {this.state.isShowingDangerAlert ? (
+                        <Alert type="danger" headline="Whoops!"
+                            onDismiss={this.onAlertDismissed.bind(this)}
+                            timeout={this.state.timeout}
+                        >
+                            Sorry, couldn't post your Answer
+						</Alert>
+                    ) : null}
+                </AlertContainer>
                 <div className="panel panel-warning">
                     <div className="panel-heading">
                         {question.title != '' && question.moderatorId == question.userId ?
@@ -280,7 +316,7 @@ class IndiFeed extends Component {
                                     </ul>
                                 </div>
                             </div>
-                             :
+                            :
                             <h3 className="panel-title">{question.title}{question.active ? <span className='ActiveSpan pull-right'>Active</span> : <span className='ActiveSpan pull-right'>InActive</span>}</h3>
                         }
                     </div>
@@ -289,13 +325,7 @@ class IndiFeed extends Component {
                             <div className='col-lg-12 RealDesc'>
                                 <h5>{question.content}</h5>
                             </div>
-                            {/*<div className='col-lg-12'>*/}
-                                {/*{this.state.quesImage != '' ?*/}
-                                    {/*<img className='img-responsive FeedImage' src={`http://10.177.7.117:8081${this.state.quesImage}`}/> :*/}
-                                    {/*''*/}
-                                {/*}*/}
-
-                            {/*</div>*/}
+                       
                             <div className='col-lg-3 pull-right'>By: {question.userName}</div>
                             <div className='col-lg-3'>Category: {question.category}</div>
                             <p>Tags :
@@ -319,31 +349,27 @@ class IndiFeed extends Component {
                                             View Comment
                                         </Link>
 
-                                        <hr/>
+                                        <hr />
                                     </div>
                                 ))}
                             </div>
                         </div> :
                         ''
                     }
-                    <textarea ref="answer" className="form-control AnswerQues" rows="4" placeholder="Add Answer"/>
+                    <textarea ref="answer" className="form-control AnswerQues" rows="4" placeholder="Add Answer" />
 
 
                     {question.active ?
-                        <button style={{margin: '40px'}} type="button" className="btn btn-default"
-                                onClick={(e) => this.postA()}>
+                        <button style={{ margin: '40px' }} type="button" className="btn btn-default"
+                            onClick={(e) => this.postA()}>
                             Answer
                         </button>
-                         :
-                        <button style={{margin: '40px'}} disabled type="button" className="btn btn-default"
-                                onClick={(e) => this.postA()}>
+                        :
+                        <button style={{ margin: '40px' }} disabled type="button" className="btn btn-default"
+                            onClick={(e) => this.postA()}>
                             Answer
                         </button>
                     }
-
-
-                    <input type="file" onChange={(e) => this.handleFile(e)}/>
-
 
                 </div>
             </div>

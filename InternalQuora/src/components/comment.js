@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
+import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
+
 var USER = JSON.parse(localStorage.getItem('user'))
 
 class Comment extends Component {
 
     state = {
-        answer : {
+        answer: {
             answer: '',
             answerId: '',
             userId: '',
             userName: ''
         },
         answerFetched: false,
-        comment : [
+        comment: [
             {
                 commentId: '',
                 answerId: '',
@@ -22,7 +24,10 @@ class Comment extends Component {
                 userId: '',
                 userName: ''
             }
-        ]
+        ],
+        isShowingSuccessAlert: false,
+        isShowingDangerAlert: false,
+        timeout: 1000,
     }
 
     postComment() {
@@ -33,9 +38,9 @@ class Comment extends Component {
             method: 'post',
             url: 'http://10.177.7.117:8080/questionAnswer/addComment',
             data: {
-                "comment" : content,
-                "userId" : USER.userId,
-                "answerId" : this.props.match.params.answerId
+                "comment": content,
+                "userId": USER.userId,
+                "answerId": this.props.match.params.answerId
             }
         }).then(function (response) {
             console.log(response.data)
@@ -49,16 +54,18 @@ class Comment extends Component {
                     let data = response.data.commentDTOList
                     let tempcomment = this.state.comment.slice()
                     tempcomment.splice()
-                    this.setState({comment: data})
+                    this.setState({ comment: data })
                     console.log(this.state.comment)
+                    this.onAlertToggle("isShowingSuccessAlert")
                 }.bind(this))
                 .catch(function (error) {
                     console.log(error)
+                    this.onAlertToggle("isShowingDangerAlert")
                 })
         }.bind(this))
             .catch(function (error) {
                 console.log(error);
-                alert('Could not add Comment')
+                this.onAlertToggle("isShowingDangerAlert")
             });
     }
 
@@ -70,8 +77,8 @@ class Comment extends Component {
         })
         console.log(this.state.answer)
         console.log(this.state.answerFetched)
-        if(this.state.answer != '') {
-            this.setState({answerFetched: true})
+        if (this.state.answer != '') {
+            this.setState({ answerFetched: true })
         }
         console.log(this.state.answerFetched)
 
@@ -84,7 +91,7 @@ class Comment extends Component {
                 let data = response.data.commentDTOList
                 let tempcomment = this.state.comment.slice()
                 tempcomment.splice()
-                this.setState({comment: data})
+                this.setState({ comment: data })
                 console.log(this.state.comment)
             }.bind(this))
             .catch(function (error) {
@@ -101,15 +108,35 @@ class Comment extends Component {
             <div>
                 <div style={{ padding: '50px 0px' }}>
                     <div className="container">
+                        <AlertContainer position="top-right">
+                            {this.state.isShowingSuccessAlert ? (
+                                <Alert type="success" headline="Done!"
+                                    onDismiss={this.onAlertDismissed.bind(this)}
+                                    timeout={this.state.timeout}
+                                >
+                                    Your Comment has been posted!
+						</Alert>
+                            ) : null}
+
+
+                            {this.state.isShowingDangerAlert ? (
+                                <Alert type="danger" headline="Whoops!"
+                                    onDismiss={this.onAlertDismissed.bind(this)}
+                                    timeout={this.state.timeout}
+                                >
+                                    Sorry, couldn't post your Comment
+						</Alert>
+                            ) : null}
+                        </AlertContainer>
                         <div className="customjumbotron">
                             <div className="row">
                                 <div className="col-md-3">
                                     <profile-pic size="lg"
 
-                                                 image-url="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXgxKQ2hBgl1BFKaZlHzfhdG86GUKZ0jIajau7PgSh12MZM9hO'"
-                                                 className="ng-scope ng-isolate-scope admin_pic">
+                                        image-url="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXgxKQ2hBgl1BFKaZlHzfhdG86GUKZ0jIajau7PgSh12MZM9hO'"
+                                        className="ng-scope ng-isolate-scope admin_pic">
                                         <span className="profile-pic ng-binding circle-lg" ng-bind="letters" ng-class="size_class"
-                                              style={{ backgroundImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXgxKQ2hBgl1BFKaZlHzfhdG86GUKZ0jIajau7PgSh12MZM9hO&quot' }}>
+                                            style={{ backgroundImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXgxKQ2hBgl1BFKaZlHzfhdG86GUKZ0jIajau7PgSh12MZM9hO&quot' }}>
                                         </span>
                                     </profile-pic>
                                 </div>
@@ -137,9 +164,9 @@ class Comment extends Component {
                                             <div className="card-title heading-5">{row.userName}</div>
                                             <ul className="card-sub-details">
                                                 <li>
-                                                <span>
-                                                    {row.comment}
-                                        </span>
+                                                    <span>
+                                                        {row.comment}
+                                                    </span>
                                                 </li>
                                                 <li style={{ textAlign: 'right' }}>
                                                     <div className="text-muted" style={{ textAlign: 'right' }}>
@@ -152,13 +179,13 @@ class Comment extends Component {
                                 ))}
 
                                 <div className="form-group has-feedback input-container-md">
-                                        <textarea auto-grow
-                                                  className="form-control"
-                                                  rows="1" max-lines="10"
-                                                  ref="commentTextArea"
-                                                  placeholder="Enter your comment here" ng-model="testarea2"
-                                                  style={{ overflowY: 'hidden', height: '96px' }}>
-                                        </textarea>
+                                    <textarea auto-grow
+                                        className="form-control"
+                                        rows="1" max-lines="10"
+                                        ref="commentTextArea"
+                                        placeholder="Enter your comment here" ng-model="testarea2"
+                                        style={{ overflowY: 'hidden', height: '96px' }}>
+                                    </textarea>
                                 </div>
                                 <div className="form-group" style={{ textAlign: 'right' }}>
                                     {this.props.match.params.active == "true" ?
