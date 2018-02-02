@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import axios from 'axios';
 import SkyLight from 'react-skylight';
-
+import Header from './header'
 import { List } from 'immutable'
-
 import { TagBox } from 'react-tag-box'
+import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
 
 var USER = JSON.parse(localStorage.getItem('user'))
 
@@ -19,7 +19,7 @@ var questionId;
 
 class PostQuestion extends Component {
 
-  
+
     state = {
         showModal: false,
         showDrop: false,
@@ -29,33 +29,12 @@ class PostQuestion extends Component {
         finalTAG: [],
         file: null,
         questionId: null,
+        buttonClass: 'btn btn-primary btn-lg ng-scope ng-isolate-scope',
+        isShowingSuccessAlert: false,
+        isShowingDangerAlert: false,
+        timeout: 1000,
     }
 
-
-
-    handleFile(e) {
-        this.setState({ file: e.target.files[0] })
-        console.log(e.target.files[0]);
-        var bodyFormData = new FormData();
-        bodyFormData.set('questionId',questionId);
-        bodyFormData.set('file', e.target.files[0])
-        axios({
-            method: 'post',
-            url: 'http://10.177.7.117:8080/questionAnswer/addQuestionImage',
-            data: bodyFormData,
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
-        })
-            .then(function (response) {
-                alert('File uploaded!')
-                console.log(response);
-            })
-            .catch(function (response) {
-                //handle error
-                alert('Upload failed!')
-                console.log(response);
-            });
-
-    }
 
     toggleDrop() {
         let current = this.state.showDrop;
@@ -67,16 +46,30 @@ class PostQuestion extends Component {
         this.setState({ tags: tags })
     }
 
+    onAlertToggle(type) {
+        this.setState({
+            [type]: !this.state[type]
+        });
+    }
+
+    onAlertDismissed(alert) {
+    this.setState({isShowingDangerAlert:false,
+        isShowingSuccessAlert: false})
+    }
+
+
     postQ() {
         let content = this.refs.descTextArea.value;
         let title = this.refs.titleTextArea.value;
-
+        this.setState({
+            buttonClass: 'btn btn-primary btn-lg ng-scope ng-isolate-scope button-loader-primary button-loader-lg'
+        })
         let val = this.state.selected.toJS();
         let valarr = []
         for (var i = 0; i < val.length; i++) {
             valarr.push(val[i].value)
         }
-    
+
         axios({
             method: 'post',
             url: 'http://10.177.7.117:8080/questionAnswer/addQuestion',
@@ -89,21 +82,26 @@ class PostQuestion extends Component {
                 "tags": valarr
             }
         }).then(function (response) {
+            this.setState({ buttonClass: 'btn btn-primary btn-lg ng-scope ng-isolate-scope' })
             console.log(response.data)
             this.setState({ questionId: response.data })
             questionId = response.data;
-            this.simpleDialog.show()
+
+            this.onAlertToggle("isShowingSuccessAlert")
+        
+
         }.bind(this))
             .catch(function (error) {
                 console.log(error);
-                alert('Could not add Question')
+                this.setState({ buttonClass: 'btn btn-primary btn-lg ng-scope ng-isolate-scope' })
+                this.onAlertToggle("isShowingDangerAlert")
             });
 
-       
+
     }
     render() {
 
-        const { tags, selected } = this.state
+        const { tags, selected, buttonClass, timeout } = this.state
         const onSelect = tag => {
             const newTag = {
                 label: tag.label,
@@ -127,6 +125,27 @@ class PostQuestion extends Component {
 
         return (
             <div className='container Profile'>
+                <AlertContainer position="top-right">
+                    {this.state.isShowingSuccessAlert ? (
+                        <Alert type="success" headline="Done!" 
+                        onDismiss={this.onAlertDismissed.bind(this)}
+                        timeout={this.state.timeout}
+                        >
+                            Your question has been posted!
+						</Alert>
+                    ) : null}
+
+
+                    {this.state.isShowingDangerAlert ? (
+                        <Alert type="danger" headline="Whoops!" 
+                        onDismiss={this.onAlertDismissed.bind(this)}
+                        timeout={this.state.timeout}
+                        >
+                            Sorry, couldn't post you question 
+						</Alert>
+                    ) : null}
+                </AlertContainer>
+                <Header user={USER} />
                 <div className="panel-body" style={{ textAlign: 'center' }}>
                     <h1>Post a new Question</h1>
                     <div className="form-group has-feedback input-container-md">
@@ -165,9 +184,19 @@ class PostQuestion extends Component {
                         >
                         </textarea>
 
+                        <h3>Add Tags: </h3>
+                        <TagBox
+                            tags={tags.toJS()}
+                            selected={selected.toJS()}
+                            onSelect={onSelect}
+                            removeTag={remove}
+                            backspaceDelete={true}
+                            placeholder={placeholder}
+                        />
+
                         <div className={this.state.showDrop ? "btn-group ng-scope dropdown open" : "btn-group ng-scope dropdown"} uib-dropdown=""
                             onClick={(event) => { this.toggleDrop() }}>
-                            <button className="btn btn-default btn-action dropdown-toggle" type="button" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded={this.state.showDrop ? "true" : "false"}>
+                            <button className="btn btn-primary btn-lg ng-scope ng-isolate-scope btn-action dropdown-toggle" type="button" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded={this.state.showDrop ? "true" : "false"}>
                                 {this.state.dropdownVal}
                                 <span className="icon-down-arrow-solid"></span>
                             </button>
@@ -193,35 +222,18 @@ class PostQuestion extends Component {
                             </ul>
                         </div>
 
-
-                        <button style={{ margin: '40px' }} type="button" className="btn btn-default"
+                      
+                        <button style={{ margin: '40px' }}
+                            type="button"
+                            className={this.state.buttonClass}
+                            button-loader="button_loader"
+                            button-loader-type="primary" button-loader-size="lg"
                             onClick={(e) => this.postQ()}>
                             Post it!
                         </button>
-
-                        <SkyLight
-                            hideOnOverlayClicked ref={ref => this.simpleDialog = ref} title="Drop an image to add to your question">
-                            <div>
-                                <input type="file" onChange={(e) => this.handleFile(e)} />
-                            </div>
-                        </SkyLight>
-
-
-                        <TagBox
-                            tags={tags.toJS()}
-                            selected={selected.toJS()}
-                            onSelect={onSelect}
-                            removeTag={remove}
-                            backspaceDelete={true}
-                            placeholder={placeholder}
-                        />
+                       
                     </div>
-
-
                 </div>
-
-
-
             </div>
 
         )
