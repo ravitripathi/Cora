@@ -30,6 +30,14 @@ class Comment extends Component {
         timeout: 1000,
     }
 
+    onAlertDismissed(alert) {
+        this.setState({
+            isShowingDangerAlert: false,
+            isShowingSuccessAlert: false
+        })
+      
+    }
+    
     postComment() {
         let tempanswer = this.props.match.params
         console.log(tempanswer)
