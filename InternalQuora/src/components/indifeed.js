@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 
+import Header from './header'
 
 const BASE_URL = 'http://'
 const INFEED_IP = '10.177.7.117'
@@ -259,6 +260,7 @@ class IndiFeed extends Component {
 
         return (
             <div className='container IndiFeed'>
+                <Header user={USER} />
                 <div className="panel panel-warning">
                     <div className="panel-heading">
                         {question.title != '' && question.moderatorId == question.userId ?
@@ -283,13 +285,13 @@ class IndiFeed extends Component {
                             <div className='col-lg-12 RealDesc'>
                                 <h5>{question.content}</h5>
                             </div>
-                            <div className='col-lg-12'>
-                                {this.state.quesImage != '' ?
-                                    <img className='img-responsive FeedImage' src={`http://10.177.7.117:8081${this.state.quesImage}`}/> :
-                                    ''
-                                }
+                            {/*<div className='col-lg-12'>*/}
+                                {/*{this.state.quesImage != '' ?*/}
+                                    {/*<img className='img-responsive FeedImage' src={`http://10.177.7.117:8081${this.state.quesImage}`}/> :*/}
+                                    {/*''*/}
+                                {/*}*/}
 
-                            </div>
+                            {/*</div>*/}
                             <div className='col-lg-3 pull-right'>By: {question.userName}</div>
                             <div className='col-lg-3'>Category: {question.category}</div>
                             <p>Tags :
@@ -312,6 +314,7 @@ class IndiFeed extends Component {
                                         <Link to={`/home/comment/${row.answer}/${row.id}/${row.userId}/${row.userName}/${question.active}`}>
                                             View Comment
                                         </Link>
+
                                         <hr/>
                                     </div>
                                 ))}

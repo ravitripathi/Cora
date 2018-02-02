@@ -16,10 +16,13 @@
     "ejs": "^2.5.7",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
+    "react-bs-notifier": "^4.4.6",
     "react-dom": "^16.2.0",
+    "react-notifications": "^1.4.3",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-sidenav": "^2.1.2",
+    "react-tag-input": "^4.7.3",
     "style-loader": "^0.19.1",
     "throttle-debounce": "^1.0.1"
   },

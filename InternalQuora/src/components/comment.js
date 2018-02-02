@@ -122,25 +122,7 @@ class Comment extends Component {
 
                         <div className="row" style={{ marginTop: '30px' }}>
                             <div className="col-md-12">
-                                <div className="form-group has-feedback input-container-md">
-                                        <textarea auto-grow=""
-                                                  className="form-control ng-pristine ng-valid ng-empty ng-touched"
-                                                  rows="4" max-lines="10"
-                                                  ref="commentTextArea"
-                                                  placeholder="Enter your comment here" ng-model="testarea2"
-                                                  style={{ overflowY: 'hidden', height: '96px' }}>
-                                        </textarea>
-                                </div>
-                                <div className="form-group" style={{ textAlign: 'right' }}>
-                                    {!this.props.match.params.active ?
-                                        <input type="submit" name="" value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
-                                        </input>
-                                        :
-                                        <input type="submit" name="" disabled value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
-                                        </input>
-                                    }
 
-                                </div>
 
                                 {comment &&
                                     <p className="heading-4">Comments ({comment.length})</p>
@@ -169,7 +151,25 @@ class Comment extends Component {
                                     </div>
                                 ))}
 
+                                <div className="form-group has-feedback input-container-md">
+                                        <textarea auto-grow
+                                                  className="form-control"
+                                                  rows="1" max-lines="10"
+                                                  ref="commentTextArea"
+                                                  placeholder="Enter your comment here" ng-model="testarea2"
+                                                  style={{ overflowY: 'hidden', height: '96px' }}>
+                                        </textarea>
+                                </div>
+                                <div className="form-group" style={{ textAlign: 'right' }}>
+                                    {!this.props.match.params.active ?
+                                        <input type="submit" name="" value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
+                                        </input>
+                                        :
+                                        <input type="submit" name="" disabled value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
+                                        </input>
+                                    }
 
+                                </div>
 
                             </div>
                         </div>

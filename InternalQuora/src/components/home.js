@@ -28,7 +28,7 @@ class Home extends Component {
             <div className='container Home'>
                 <div className='row'>
                     <div className='col-lg-4 col-lg-offset-4 text-center MainTitle'>
-                        CORA
+                        <span className='C'>C</span>ora
                         <div className='TitleSlogan'>
                             Knowledge.Simplified!!!
                         </div>

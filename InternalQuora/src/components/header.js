@@ -7,7 +7,9 @@ class Header extends Component {
 
     componentWillMount() {
         // console.log('Check' + this.props.isSearchOn)
-
+        // if (USER == null) {
+        //     window.location.reload();
+        // }
     }
 
     handleSearch() {

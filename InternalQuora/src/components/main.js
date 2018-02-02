@@ -350,6 +350,7 @@ class Main extends Component {
     }
 
     componentDidMount() {
+
         if (this.state.searched[0].questionId == '') {
             this.state.searched.splice(0, 1);
         }
@@ -361,24 +362,29 @@ class Main extends Component {
 
         return (
             <div className='container Main'>
+                <Header user={USER} addSearch={this.addSearch.bind(this)} />
                 <row>
                     <div className='col-lg-2' >
                         <div style={{ border: '2px', borderColor: '#4D4341', background: '', color: '#000000', width: 200, marginTop: '80px', marginLeft: '-50px' }}>
                             <SideNav>
                                 <h3><center>Top Categories</center></h3>
                                 {categoryDetails.map((row, index) => (
-                                    <Nav id='dashboard'>
-                                        <NavIcon><img src={row.imageUrl} style={{ width: '15px', height: '15px' }} /></NavIcon>
-                                        <NavText><a onClick={(e) => this.getCatLink(`${row.categoryName}`)}>{row.categoryName}</a></NavText>
-                                        <hr />
-                                    </Nav>
+                                    <div>
+                                        {row.categoryName != 'Bot' ?
+                                            <Nav id='dashboard'>
+                                                <NavIcon><img src={row.imageUrl} style={{ width: '15px', height: '15px' }} /></NavIcon>
+                                                <NavText><a onClick={(e) => this.getCatLink(`${row.categoryName}`)}>{row.categoryName}</a></NavText>
+                                                <hr />
+                                            </Nav> :
+                                            ''
+                                        }
+                                    </div>
                                 ))}
                             </SideNav>
                         </div>
                     </div>
 
                     <div className='col-lg-10'>
-                        <Header user={USER} addSearch={this.addSearch.bind(this)} />
                         {isSearchOn ?
                             <div className='container Search'>
                                 <div className="panel panel-warning">
