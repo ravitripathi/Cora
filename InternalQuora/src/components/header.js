@@ -36,7 +36,7 @@ class Header extends Component {
                             <li><a href="/home/notification"><FontAwesome name='bell' /></a></li>
                             <li><a href="/home/post"><FontAwesome name='pencil-square-o' />Ask A Question</a></li>
                             {USER ?
-                             <li><a href={`/home/profile/${USER.email}`} role="button">{USER.name}</a></li>:
+                                <li><a><Link to={`/home/profile/${USER.userId}`}>{USER.name}</Link></a></li>:
                              <li><a href='/home/profile/jayantrana69@gmail.com' role="button">Joker</a></li> 
                                 
                             }

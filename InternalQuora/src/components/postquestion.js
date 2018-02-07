@@ -10,6 +10,7 @@ import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
 
 var USER = JSON.parse(localStorage.getItem('user'))
 
+const QNA_IP = '192.168.43.60'
 
 const sampleTags = List(
     [].map(t => ({
@@ -90,7 +91,7 @@ class PostQuestion extends Component {
 
         axios({
             method: 'post',
-            url: 'http://10.177.7.117:8080/questionAnswer/addQuestion',
+            url: 'http://' + QNA_IP + ':8080/questionAnswer/addQuestion',
             data: {
                 "title": title,
                 "userId": USER.userId,

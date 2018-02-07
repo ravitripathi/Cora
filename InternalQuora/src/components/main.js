@@ -8,17 +8,23 @@ import SideNav, { Nav, NavIcon, NavText } from 'react-sidenav';
 import Header from './header'
 
 const BASE_URL = 'http://'
-const LOGIN_IP = '10.177.7.61'
+const LOGIN_IP = '192.168.43.59'
+// const LOGIN_IP = '10.177.7.61'
 const LOGIN_PORT = 8080
 const LOGIN_END = '/user/login'
 
-const FEED_IP = '10.177.7.86'
+const FEED_IP = '192.168.43.122'
+// const FEED_IP = '10.177.7.86'
 const FEED_PORT = 8080
 const FEED_END = '/notifications/feed'
 
-const SEARCH_IP = '10.177.7.93'
+const SEARCH_IP = '192.168.43.157'
+// const SEARCH_IP = '10.177.7.93'
 const SEARCH_PORT = 8080
 const SEARCH_END = '/question/autoSuggest/'
+
+const QNA_IP = '192.168.43.60'
+const ADMIN_IP = '192.168.43.186'
 
 var USER = JSON.parse(localStorage.getItem('user'))
 
@@ -122,7 +128,7 @@ class Main extends Component {
             }
         ],
 
-        heading: 'Top Feed',
+        heading: 'Feed',
         indiCategory: [{}]
 
     }
@@ -177,7 +183,8 @@ class Main extends Component {
         datum.append('category', catName);
         axios({
             method: 'post',
-            url: 'http://10.177.7.117:8080/questionAnswer/getQuestionsByCategory',
+            url: 'http://' + QNA_IP + ':8080/questionAnswer/getQuestionsByCategory',
+            // url: 'http://10.177.7.117:8080/questionAnswer/getQuestionsByCategory',
             data: datum
 
         })
@@ -339,7 +346,7 @@ class Main extends Component {
 
         axios({
             method: 'get',
-            url: 'http://10.177.7.124:8080/getAll'
+            url: 'http://' + ADMIN_IP + ':8080/getAll'
         })
             .then(function (response) {
                 this.setState({ categoryDetails: response.data })

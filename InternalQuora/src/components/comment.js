@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
+// const QNA_IP = '192.168.43.60'
+const QNA_IP = '172.16.20.48'
+import Header from './header'
+
+import Constant from '../Const/const.js'
+
 import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
 
 var USER = JSON.parse(localStorage.getItem('user'))
@@ -44,7 +50,8 @@ class Comment extends Component {
         let content = this.refs.commentTextArea.value;
         axios({
             method: 'post',
-            url: 'http://10.177.7.117:8080/questionAnswer/addComment',
+            url: 'http://' + QNA_IP + ':8080/questionAnswer/addComment',
+            // url: 'http://10.177.7.117:8080/questionAnswer/addComment',
             data: {
                 "comment": content,
                 "userId": USER.userId,
@@ -54,7 +61,8 @@ class Comment extends Component {
             console.log(response.data)
             axios({
                 method: 'get',
-                url: 'http://10.177.7.117:8080/questionAnswer/getCommentsByAnswerId/' + tempanswer.answerId
+                url: 'http://' + QNA_IP + ':8080/questionAnswer/getCommentsByAnswerId/' + tempanswer.answerId
+                // url: 'http://10.177.7.117:8080/questionAnswer/getCommentsByAnswerId/' + tempanswer.answerId
             })
                 .then(function (response) {
                     console.log(response)
@@ -92,7 +100,8 @@ class Comment extends Component {
 
         axios({
             method: 'get',
-            url: 'http://10.177.7.117:8080/questionAnswer/getCommentsByAnswerId/' + tempanswer.answerId
+            url: 'http://' + QNA_IP + ':8080/questionAnswer/getCommentsByAnswerId/' + tempanswer.answerId
+            // url: 'http://10.177.7.117:8080/questionAnswer/getCommentsByAnswerId/' + tempanswer.answerId
         })
             .then(function (response) {
                 console.log(response)
@@ -115,6 +124,7 @@ class Comment extends Component {
         return (
             <div>
                 <div style={{ padding: '50px 0px' }}>
+                    <Header user={USER} />
                     <div className="container">
                         <AlertContainer position="top-right">
                             {this.state.isShowingSuccessAlert ? (

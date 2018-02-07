@@ -11,6 +11,9 @@ const INFEED_PORT = 8080
 const QUES_END = '/questionAnswer/getQuestionByQuestionId/?questionId='
 const ANSW_END = '/questionAnswer/getAnswersByQuestionId/'
 
+const QNA_IP = '172.16.20.48'
+// const QNA_IP = '192.168.43.60'
+
 var USER = JSON.parse(localStorage.getItem('user'))
 
 class IndiFeed extends Component {
@@ -28,6 +31,16 @@ class IndiFeed extends Component {
             userName: '',
             moderatorId: ''
         },
+        comment: [
+            {
+                commentId: '',
+                answerId: '',
+                comment: '',
+                timestamp: '',
+                userId: '',
+                userName: ''
+            }
+        ],
         quesImage: '',
         isActive: true,
         answers: [
@@ -36,6 +49,77 @@ class IndiFeed extends Component {
         isShowingSuccessAlert: false,
         isShowingDangerAlert: false,
         timeout: 1000,
+        commentClicked: false,
+        answerActive: 0
+    }
+    
+    postComment() {
+        let tempanswer = this.props.match.params
+        console.log(tempanswer)
+        let content = this.refs.commentTextArea.value;
+        axios({
+            method: 'post',
+            url: 'http://' + QNA_IP + ':8080/questionAnswer/addComment',
+            // url: 'http://10.177.7.117:8080/questionAnswer/addComment',
+            data: {
+                "comment": content,
+                "userId": USER.userId,
+                "answerId": this.props.match.params.answerId
+            }
+        }).then(function (response) {
+            console.log(response.data)
+            axios({
+                method: 'get',
+                url: 'http://' + QNA_IP + ':8080/questionAnswer/getCommentsByAnswerId/' + tempanswer.answerId
+                // url: 'http://10.177.7.117:8080/questionAnswer/getCommentsByAnswerId/' + tempanswer.answerId
+            })
+                .then(function (response) {
+                    console.log(response)
+                    this.refs.commentTextArea.value = ''
+                    let data = response.data.commentDTOList
+                    let tempcomment = this.state.comment.slice()
+                    tempcomment.splice()
+                    this.setState({ comment: data })
+                    console.log(this.state.comment)
+                    this.onAlertToggle("isShowingSuccessAlert")
+                }.bind(this))
+                .catch(function (error) {
+                    console.log(error)
+                    this.onAlertToggle("isShowingDangerAlert")
+                })
+        }.bind(this))
+            .catch(function (error) {
+                console.log(error);
+                this.onAlertToggle("isShowingDangerAlert")
+            });
+    }
+    
+    showComments = (event) => {
+        this.setState({commentClicked: !this.state.commentClicked})
+        let answerid = event.target.id
+        this.setState({answerActive: answerid})
+        console.log(this.state.answerActive)
+        console.log(answerid)
+        axios({
+            method: 'get',
+            url: 'http://' + QNA_IP + ':8080/questionAnswer/getCommentsByAnswerId/' + event.target.id
+        })
+            .then(function (response) {
+                console.log('Comments')
+                console.log(response)
+                console.log(this.state.answerActive)
+                let data = response.data.commentDTOList
+                // if (this.state.comment != null) {
+                //     let tempcomment = this.state.comment.slice()
+                //     tempcomment.splice()
+                // }
+                //
+                this.setState({ comment: data })
+                console.log(this.state.comment)
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error)
+            })
     }
 
     postA() {
@@ -49,7 +133,8 @@ class IndiFeed extends Component {
 
         if (this.state.file) {
             data.append('file', this.state.file);
-            axios.post('http://10.177.7.117:8080/questionAnswer/addAnswer', data)
+            axios.post('http://' + QNA_IP + ':8080/questionAnswer/addAnswer', data)
+            // axios.post('http://10.177.7.117:8080/questionAnswer/addAnswer', data)
                 .then(function (response) {
                     console.log(response.data)
                     axios({
@@ -65,7 +150,8 @@ class IndiFeed extends Component {
                             })
                             axios({
                                 method: 'get',
-                                url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + ANSW_END + qid
+                                url: BASE_URL + QNA_IP + ':' + INFEED_PORT + ANSW_END + qid
+                                // url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + ANSW_END + qid
                             })
                                 .then(function (response) {
                                     console.log(response)
@@ -93,13 +179,15 @@ class IndiFeed extends Component {
                 });
         }
         else {
-            axios.post('http://10.177.7.117:8080/questionAnswer/addAnswerWithoutImage', data)
+            axios.post('http://' + QNA_IP + ':8080/questionAnswer/addAnswerWithoutImage', data)
+            // axios.post('http://10.177.7.117:8080/questionAnswer/addAnswerWithoutImage', data)
                 .then(function (response) {
                     console.log(response.data)
                     this.refs.answer.value = ''
                     axios({
                         method: 'post',
-                        url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
+                        url: BASE_URL + QNA_IP + ':' + INFEED_PORT + QUES_END + qid
+                        // url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
                     })
                         .then(function (response) {
                             console.log(response)
@@ -109,7 +197,8 @@ class IndiFeed extends Component {
                             })
                             axios({
                                 method: 'get',
-                                url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + ANSW_END + qid
+                                url: BASE_URL + QNA_IP + ':' + INFEED_PORT + ANSW_END + qid
+                                // url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + ANSW_END + qid
                             })
                                 .then(function (response) {
                                     console.log(response)
@@ -144,14 +233,16 @@ class IndiFeed extends Component {
         console.log(this.refs.active.checked)
         axios({
             method: 'get',
-            url: 'http://10.177.7.117:8080/questionAnswer/deactivateQuestion/' + this.state.question.questionId
+            url: 'http://' + QNA_IP + ':8080/questionAnswer/deactivateQuestion/' + this.state.question.questionId
+            // url: 'http://10.177.7.117:8080/questionAnswer/deactivateQuestion/' + this.state.question.questionId
         })
             .then(function (response) {
                 console.log(response)
                 let qid = this.props.match.params.component
                 axios({
                     method: 'post',
-                    url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
+                    url: BASE_URL + QNA_IP + ':' + INFEED_PORT + QUES_END + qid
+                    // url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
                 })
                     .then(function (response) {
                         console.log(response)
@@ -211,7 +302,8 @@ class IndiFeed extends Component {
         let qid = this.props.match.params.component
         axios({
             method: 'post',
-            url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
+            url: BASE_URL + QNA_IP + ':' + INFEED_PORT + QUES_END + qid
+            // url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + QUES_END + qid
         })
             .then(function (response) {
                 console.log(response)
@@ -239,7 +331,8 @@ class IndiFeed extends Component {
                 console.log(this.state.quesImage)
                 axios({
                     method: 'get',
-                    url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + ANSW_END + qid
+                    url: BASE_URL + QNA_IP + ':' + INFEED_PORT + ANSW_END + qid
+                    // url: BASE_URL + INFEED_IP + ':' + INFEED_PORT + ANSW_END + qid
                 })
                     .then(function (response) {
                         console.log(response)
@@ -272,7 +365,7 @@ class IndiFeed extends Component {
     }
 
     render() {
-        const { question, answers, timeout } = this.state
+        const { comment, question, answers, timeout } = this.state
 
         return (
             <div className='container IndiFeed'>
@@ -345,14 +438,73 @@ class IndiFeed extends Component {
                                     <div className='col-lg-12'>
                                         <span className='pull-right AuthorName'>By: <a>{row.userName}</a></span>
                                         <p>{row.answer}</p>
-                                        <Link to={`/home/comment/${row.answer}/${row.id}/${row.userId}/${row.userName}/${question.active}`}>
-                                            View Comment
-                                        </Link>
-
+                                        {/*<Link to={`/home/comment/${row.answer}/${row.id}/${row.userId}/${row.userName}/${question.active}`}>*/}
+                                            {/*View Comment*/}
+                                        {/*</Link>*/}
+                                        <a id={row.id} onClick={this.showComments}>View Comments</a>
+    
+                                        {this.state.commentClicked && this.state.answerActive == row.id ?
+                                            <div className="row" style={{ marginTop: '30px' }}>
+                                                <div className="col-md-12">
+                
+                
+                                                    {comment &&
+                                                    <p className="heading-4">Comments ({comment.length})</p>
+                                                    }
+                
+                                                    {comment && comment.map((row, index) => (
+                                                        <div className="list-view-card comment_card">
+                                                            <div className="card-image">
+                                                                <profile-pic size="md" image-url="https://static1.squarespace.com/static/563186f5e4b0d916cf7ec6ce/t/563ad7a8e4b09a4c529b97e5/1446696874049/"></profile-pic>
+                                                            </div>
+                                                            <div className="card-details">
+                                                                <div className="card-title heading-5">{row.userName}</div>
+                                                                <ul className="card-sub-details">
+                                                                    <li>
+                                                    <span>
+                                                        {row.comment}
+                                                    </span>
+                                                                    </li>
+                                                                    <li style={{ textAlign: 'right' }}>
+                                                                        <div className="text-muted" style={{ textAlign: 'right' }}>
+                                                                            {row.timestamp}
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                
+                                                    <div className="form-group has-feedback input-container-md">
+                                    <textarea auto-grow
+                                              className="form-control"
+                                              rows="1" max-lines="10"
+                                              ref="commentTextArea"
+                                              placeholder="Enter your comment here" ng-model="testarea2"
+                                              style={{ overflowY: 'hidden', height: '96px' }}>
+                                    </textarea>
+                                                    </div>
+                                                    <div className="form-group" style={{ textAlign: 'right' }}>
+                                                        {question.active ?
+                                                            <input type="submit" name="" value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
+                                                            </input>
+                                                            :
+                                                            <input type="submit" name="" disabled value="Add Comment" className="btn btn-sm btn-primary" onClick={(e) => this.postComment()}>
+                                                            </input>
+                                                        }
+                
+                                                    </div>
+            
+                                                </div>
+                                            </div> :
+                                            ''
+                                        }
                                         <hr />
                                     </div>
                                 ))}
                             </div>
+                            
+                            
                         </div> :
                         ''
                     }

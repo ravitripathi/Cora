@@ -9,6 +9,11 @@
     height: 100%;
 }
 
+.customjumbotron {
+    min-height: 60px;
+    padding: 25px;
+}
+
 .C {
     font-size: 150px;
     color: #47D6C0;

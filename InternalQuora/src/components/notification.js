@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 import orderBy from 'lodash/orderBy'
 
 import Header from './header'
 
 const BASE_URL = 'http://'
-const FEED_IP = '10.177.7.86'
+const FEED_IP = '192.168.43.122'
+// const FEED_IP = '10.177.7.86'
 const FEED_PORT = 8080
 const NOT_END = '/notifications/findAllByUser?user_id='
 
@@ -51,9 +53,27 @@ class Notification extends Component {
                                 <div>
                                     {row.type == 3 ?
                                         <div>
-                                            <h5>{row.details.answer_id} just answered on your {row.details.question_id}</h5>
+                                            <p>Your question <Link to={`/home/feed/${row.details.question_id}`}>{row.details.question}</Link> got a new answer</p>
                                         </div> :
-                                        <div>Type: {row.type}</div>
+                                        ''
+                                    }
+                                    {row.type == 4 ?
+                                        <div>
+                                            <p><Link to={`/home/profile/${row.details.follower_id}`}>{row.details.name}</Link> just followed you</p>
+                                        </div> :
+                                        ''
+                                    }
+                                    {row.type == 2 ?
+                                        <div>
+                                            <p>New question posted on {row.details.category}</p>
+                                        </div> :
+                                        ''
+                                    }
+                                    {row.type == 1 ?
+                                        <div>
+                                            <p>{row.details.name} just posted a question</p>
+                                        </div> :
+                                        ''
                                     }
                                     <hr />
                                 </div>

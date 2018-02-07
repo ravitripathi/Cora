@@ -6,6 +6,9 @@ import axios from 'axios';
 
 var USER = JSON.parse(localStorage.getItem('user'))
 
+const USER_IP = '192.168.43.59'
+const QNA_IP = '192.168.43.60'
+
 class Profile extends Component {
 
     state = {
@@ -46,7 +49,7 @@ class Profile extends Component {
     checkFollower(user) {
         axios({
             method: 'post',
-            url: 'http://10.177.7.61:8080/user/isFollowing?followerId=' + USER.userId + '&followeeId=' + this.props.match.params.userId
+            url: 'http://' + USER_IP + ':8080/user/isFollowing?followerId=' + USER.userId + '&followeeId=' + this.props.match.params.userId
         })
             .then(function (response) {
                 console.log(response)
@@ -62,7 +65,7 @@ class Profile extends Component {
     }
 
     getCategories(user) {
-        axios.post("http://10.177.7.61:8080/user/findCategoryListName" + "?userId=" + user)
+        axios.post('http://' + USER_IP + ':8080/user/findCategoryListName' + '?userId=' + user)
             .then(function (response) {
                 console.log(response.data)
                 this.setState({
@@ -74,7 +77,7 @@ class Profile extends Component {
             });
     }
     getProfile(user) {
-        axios.post("http://10.177.7.61:8080/user/getProfile" + "?userId=" + user)
+        axios.post("http://" + USER_IP + ":8080/user/getProfile" + "?userId=" + user)
             .then(function (response) {
                 console.log(response.data)
                 this.setState({
@@ -96,7 +99,7 @@ class Profile extends Component {
     getAnswersGivenByUser(user) {
         const data = new FormData();
         data.append('userId', user);
-        axios.post('http://10.177.7.117:8080/questionAnswer/questionAnswerByUserId', data)
+        axios.post('http://' + QNA_IP + ':8080/questionAnswer/questionAnswerByUserId', data)
             .then(function (response) {
                 console.log(response);
                 let data = response.data
@@ -117,7 +120,7 @@ class Profile extends Component {
 
         const data = new FormData();
         data.append('userId', user);
-        axios.post("http://10.177.7.117:8080/questionAnswer/getQuestionsByUserId", data)
+        axios.post("http://" + QNA_IP + ":8080/questionAnswer/getQuestionsByUserId", data)
             .then(function (response) {
                 console.log(response);
                 let data = response.data
@@ -132,7 +135,7 @@ class Profile extends Component {
     followUser = (e) => {
         axios({
             method: 'post',
-            url: 'http://10.177.7.61:8080/user/follow?followerId=' + USER.userId + '&followeeId=' + this.props.match.params.userId
+            url: 'http://' + USER_IP + ':8080/user/follow?followerId=' + USER.userId + '&followeeId=' + this.props.match.params.userId
         })
             .then(function (response) {
                 console.log(response)
